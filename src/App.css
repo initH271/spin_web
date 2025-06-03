@@ -1,0 +1,1032 @@
+/* 重置和基础样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+  overflow-x: hidden;
+  background: #f0f0f0;
+}
+
+/* 主容器 */
+.dubai-wheel-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* 主框架 - 响应式设计，保持700:395宽高比，无最大宽度限制 */
+.main-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 700 / 395;
+  background: #ffffff;
+  overflow: hidden;
+  box-shadow: 0 0.8vw 3.2vw rgba(0, 0, 0, 0.1);
+}
+
+/* 背景渐变 */
+.background-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(114.33deg, #ff5ea7 26.13%, #c85aff 61.46%, #5a74ff 97.84%);
+
+  z-index: 1;
+}
+
+/* 背景装饰图片层 */
+.background-image-8024534 {
+  position: absolute;
+  top: -74.68%; /* -295/395 */
+  left: -55.86%; /* -391/700 */
+  width: 211.71%; /* 1482/700 */
+  height: 200.51%; /* 792/395 */
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  z-index: 2;
+}
+
+.background-gradient-bar {
+  position: absolute;
+  top: -16.2%; /* -64/395 */
+  left: -0.29%; /* -2/700 */
+  width: 100.29%; /* 702/700 */
+  height: 124.3%; /* 491/395 */
+  background: linear-gradient(
+    45deg,
+    rgba(255, 94, 167, 0.3) 0%,
+    rgba(200, 90, 255, 0.3) 50%,
+    rgba(90, 116, 255, 0.3) 100%
+  );
+  z-index: 3;
+}
+
+/* Logo - 相对位置 */
+.logo-section {
+  position: absolute;
+  top: 5.82%; /* 23/395 */
+  left: 4%; /* 28/700 */
+  width: 29.29%; /* 205/700 */
+  height: 7.09%; /* 28/395 */
+  z-index: 10;
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 转盘主体区域 - 相对位置 */
+.spin-wheel-group {
+  position: absolute;
+  top: 7.59%; /* 30/395 */
+  left: 45.43%; /* 318/700 */
+  width: 45.46%; /* 318.25/700 */
+  height: 80.57%; /* 318.25/395 */
+  z-index: 5;
+}
+
+/* spin_plate_base - 转盘底座 */
+.spin-plate-base {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 6;
+}
+
+.spin-plate-base-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* spin_plate - 可旋转的转盘 - 相对位置 */
+.spin-plate {
+  position: absolute;
+  top: 7.54%; /* 24/318.25 */
+  left: 8.12%; /* 25.83/318.25 */
+  width: 83.95%; /* 267.17/318.25 */
+  height: 84.39%; /* 268.6/318.25 */
+  transition: transform 3s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 7;
+}
+
+.spin-plate.spinning {
+  transition: transform 3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.spin-plate-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 转盘文字 - 响应式字体 */
+.prize-text {
+  position: absolute;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
+  font-size: 3.43vw; /* 24px at 700px width */
+  text-align: center;
+  text-shadow: 0 0.2vw 0.4vw rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  transition: transform 3s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-origin: center center;
+}
+
+/* BigWin 文字位置 - 相对于转盘 */
+.bigwin-text {
+  top: 42.07%; /* 113/268.6 */
+  left: 9.99%; /* 26.69/267.17 */
+  width: 20.08%; /* 53.66/267.17 */
+  height: 12.54%; /* 33.68/268.6 */
+  line-height: 1.22;
+}
+
+/* Thank You 文字位置 - 相对于转盘 */
+.thankyou-text {
+  top: 42.07%; /* 113/268.6 */
+  left: 62.79%; /* 167.74/267.17 */
+  width: 31.63%; /* 84.49/267.17 */
+  height: 25.08%; /* 67.36/268.6 */
+  line-height: 1.22;
+}
+
+/* spin_pointer - 中心指针按钮 - 相对位置 */
+.spin-pointer-group {
+  position: absolute;
+  top: 33.95%; /* 108.03/318.25 */
+  left: 38.42%; /* 122.26/318.25 */
+  width: 22.25%; /* 70.79/318.25 */
+  height: 29.42%; /* 93.62/318.25 */
+  z-index: 15;
+}
+
+.spin-pointer-button {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spin-pointer-button:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.spin-pointer-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spin-pointer-button.spinning {
+  animation: buttonPulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes buttonPulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+.spin-pointer-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.spin-text {
+  position: absolute;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
+  font-size: 2.86vw; /* 20px at 700px width */
+  text-shadow: 0 0.2vw 0.4vw rgba(0, 0, 0, 0.5);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* spin_wheel_base - 底部装饰条 - 相对位置 */
+.spin-wheel-base {
+  position: absolute;
+  top: 80.25%; /* 317/395 */
+  left: 51.68%; /* 361.74/700 */
+  width: 32.86%; /* 230/700 */
+  height: 12.41%; /* 49/395 */
+  z-index: 4;
+}
+
+.spin-wheel-base-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 底部按钮 - 完全响应式 */
+.bottom-button-section {
+  position: absolute;
+  top: 54.68%; /* 215.91/395 */
+  left: 10.29%; /* 72/700 */
+  width: 28.86%; /* 202/700 */
+  height: 8.1%; /* 32/395 */
+  z-index: 8;
+}
+
+.action-button {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #5e06dd;
+  border: none;
+  border-radius: 2.86vw;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0.4vw 1.5vw rgba(94, 6, 221, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding-left: 15.35%; */
+  text-align: center;
+}
+
+.action-button:hover:not(:disabled) {
+  background: #7e30ef;
+  transform: translateY(-0.2vw);
+  box-shadow: 0 0.6vw 2vw rgba(94, 6, 221, 0.4);
+}
+
+.action-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.button-text {
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
+  font-size: 2.29vw; /* 16px at 700px width */
+  text-shadow: 0 0.2vw 0.4vw rgba(0, 0, 0, 0.3);
+  line-height: 1.22;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* 装饰元素 */
+.decoration-elements {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+}
+
+/* 星星装饰位置 - 相对坐标 */
+.star-1 {
+  position: absolute;
+  top: 30.89%; /* 122/395 */
+  left: 5.71%; /* 40/700 */
+  width: 3.29%; /* 23/700 */
+  height: 4.05%; /* 16/395 */
+}
+
+.star-2 {
+  position: absolute;
+  top: 12.66%; /* 50/395 */
+  left: 90.86%; /* 636/700 */
+  width: 3.71%; /* 26/700 */
+  height: 8.61%; /* 34/395 */
+}
+
+.star-3 {
+  position: absolute;
+  top: 16.96%; /* 67/395 */
+  left: 30.71%; /* 215/700 */
+  width: 4.14%; /* 29/700 */
+  height: 7.59%; /* 30/395 */
+}
+
+/* 金币装饰位置 - 相对坐标 */
+.gold-coin-1 {
+  position: absolute;
+  top: 63.54%; /* 251/395 */
+  left: 39.57%; /* 277/700 */
+  width: 3.86%; /* 27/700 */
+  height: 5.57%; /* 22/395 */
+}
+
+.gold-coin-2 {
+  position: absolute;
+  top: 70.63%; /* 279/395 */
+  left: 11.29%; /* 79/700 */
+  width: 5.79%; /* 40.5/700 */
+  height: 8.48%; /* 33.5/395 */
+}
+
+.gold-coin-3 {
+  position: absolute;
+  top: 73.16%; /* 289/395 */
+  left: 91.71%; /* 642/700 */
+  width: 3.43%; /* 24/700 */
+  height: 4.3%; /* 17/395 */
+}
+
+.gold-coin-4 {
+  position: absolute;
+  top: 77.47%; /* 306/395 */
+  left: 87.29%; /* 611/700 */
+  width: 3.14%; /* 22/700 */
+  height: 4.56%; /* 18/395 */
+}
+
+/* 金币堆装饰位置 - 相对坐标 */
+.coin-staf-1 {
+  position: absolute;
+  top: 81.01%; /* 320/395 */
+  left: 49.96%; /* 349.74/700 */
+  width: 8.14%; /* 57/700 */
+  height: 13.16%; /* 52/395 */
+}
+
+.coin-staf-2 {
+  position: absolute;
+  top: 77.72%; /* 307/395 */
+  left: 62.86%; /* 440/700 */
+  width: 28.86%; /* 202/700 */
+  height: 16.2%; /* 64/395 */
+}
+
+/* 装饰图片通用样式 */
+.decoration-elements img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Lucky Wheel 文字 - 完全响应式 */
+.lucky-wheel-group {
+  position: absolute;
+  top: 43.8%; /* 173/395 */
+  left: 9.03%; /* 63.2/700 */
+  width: 31.85%; /* 222.96/700 */
+  height: 8.39%; /* 33.13/395 */
+  z-index: 9;
+}
+
+.lucky-wheel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 结果显示 - 相对位置 */
+.result-display {
+  position: absolute;
+  top: 2.53%; /* 10/395 */
+  right: 1.43%; /* 10/700 */
+  z-index: 20;
+  animation: slideIn 0.5s ease-out;
+}
+
+.result-text {
+  background: rgba(255, 255, 255, 0.95);
+  color: #5e06dd;
+  padding: 1.2vw 2vw;
+  border-radius: 2.5vw;
+  font-weight: bold;
+  font-size: 2vw;
+  box-shadow: 0 0.4vw 1.5vw rgba(0, 0, 0, 0.2);
+  text-align: center;
+  border: 0.2vw solid #ff5ea7;
+  white-space: nowrap;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(10vw);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 响应式设计 - 针对vw单位优化 */
+@media (max-width: 768px) {
+  .dubai-wheel-container {
+    padding: 3vw;
+  }
+
+  /* 在小屏幕上限制最小字体大小 */
+  .prize-text {
+    font-size: max(3.43vw, 18px);
+  }
+
+  .spin-text {
+    font-size: max(2.86vw, 16px);
+  }
+
+  .button-text {
+    font-size: max(2.29vw, 14px);
+  }
+
+  .result-text {
+    font-size: max(2vw, 12px);
+    padding: max(1.2vw, 10px) max(2vw, 16px);
+    border-radius: max(2.5vw, 20px);
+    border-width: max(0.2vw, 2px);
+  }
+}
+
+@media (max-width: 480px) {
+  .dubai-wheel-container {
+    padding: 4vw;
+  }
+
+  /* 在更小屏幕上进一步限制最小字体大小 */
+  .prize-text {
+    font-size: max(4vw, 16px);
+  }
+
+  .spin-text {
+    font-size: max(3.5vw, 14px);
+  }
+
+  .button-text {
+    font-size: max(3vw, 12px);
+  }
+
+  .result-text {
+    font-size: max(2.5vw, 10px);
+    padding: max(1.5vw, 8px) max(2.5vw, 12px);
+    border-radius: max(3vw, 15px);
+    border-width: max(0.3vw, 2px);
+  }
+
+  .action-button {
+    border-radius: max(3.5vw, 15px);
+  }
+}
+
+@media (max-height: 600px) {
+  .dubai-wheel-container {
+    padding: 1vh;
+  }
+
+  .main-frame {
+    max-height: 90vh;
+  }
+}
+
+/* 超大屏幕优化 */
+@media (min-width: 1920px) {
+  .dubai-wheel-container {
+    padding: 1.5vw;
+  }
+
+  /* 在超大屏幕上限制最大字体大小 */
+  .prize-text {
+    font-size: min(3.43vw, 65px);
+  }
+
+  .spin-text {
+    font-size: min(2.86vw, 55px);
+  }
+
+  .button-text {
+    font-size: min(2.29vw, 44px);
+  }
+
+  .result-text {
+    font-size: min(2vw, 38px);
+    padding: min(1.2vw, 23px) min(2vw, 38px);
+    border-radius: min(2.5vw, 48px);
+    border-width: min(0.2vw, 4px);
+  }
+
+  .action-button {
+    border-radius: min(2.86vw, 55px);
+  }
+}
+
+/* Congratulations 弹窗样式 */
+.congratulations-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modalFadeIn 0.5s ease-out;
+}
+
+/* 黑色半透明遮罩 - 覆盖整个主框架 */
+.congratulations-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1001;
+}
+
+/* 弹窗主体 - 使用flexbox居中，根据Figma设计：352×168px */
+.congratulations-modal {
+  position: relative;
+  width: 50.29vw;
+  height: 42.53vh;
+  z-index: 1002;
+  animation: modalSlideIn 0.5s ease-out;
+}
+
+/* 弹窗内容容器 - 白色背景 */
+.modal-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 1.14vw; /* 8px at 700px width */
+  box-shadow: 0 0.8vw 3.2vw rgba(0, 0, 0, 0.3);
+  z-index: 1004;
+  overflow: hidden;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+/* 标题区域 - 根据Figma相对位置：109,11,120,36 */
+.modal-title {
+  /* top: 6.55%; */
+  /* left: 30.97%; */
+  width: 17vw;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  z-index: 1005;
+}
+
+/* 标题背景图片 - message.png，完全填充title区域 */
+.title-background-img {
+  position: absolute;
+  top: 4vh;
+  width: 17vw;
+  height: 10vh;
+  z-index: 1;
+}
+
+.title-text {
+  position: relative;
+  margin-top: 0.5vh;
+  color: #ffffff;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 2vw; /* 14px at 700px width */
+  text-align: center;
+  text-shadow: 0 0.2vw 0.4vw rgba(0, 0, 0, 0.8);
+  z-index: 2;
+}
+
+/* 主要内容区域 - 垂直布局，水平居中 */
+.modal-main-content {
+  /* position: absolute; */
+  /* top: 30.36%; */
+  /* left: 0; */
+  width: 100%;
+  /* height: 34.52%; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 1005;
+  margin: auto;
+}
+
+/* Congratulations 主标题 - 渐变色，水平居中 */
+.congratulations-title {
+  margin: 0;
+  padding: 0;
+  color: transparent;
+  background: linear-gradient(135deg, #ff5ea7 9.96%, #c85aff 54.33%, #5a74ff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 2.86vw; /* 20px at 700px width */
+  text-align: center;
+  line-height: 1.22;
+  margin-bottom: 0.86vw; /* 6px at 700px width */
+}
+
+/* 说明文字 - 水平居中 */
+.congratulations-subtitle {
+  margin: 0;
+  padding: 0;
+  color: transparent;
+  background: linear-gradient(135deg, #ff5ea7 9.96%, #c85aff 54.33%, #5a74ff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 1.71vw; /* 12px at 700px width */
+  text-align: center;
+  line-height: 1.32;
+  width: 60.51vw; /* 213/352 */
+}
+
+/* OK按钮区域 - 根据Figma相对位置：103,127,146,28 */
+.modal-button-group {
+  width: 20vw; /* 146/352 */
+  height: 7vh; /* 28/168 */
+  z-index: 1005;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 按钮装饰图片 - coin_staf_1.png，靠右显示 */
+.button-decoration-img {
+  position: absolute;
+  top: 50%;
+  right: 1.14vw; /* 8px at 700px width */
+  width: 3.43vw; /* 24px at 700px width */
+  height: 3.43vw; /* 24px at 700px width */
+  transform: translateY(-50%);
+  object-fit: contain;
+  z-index: 3;
+}
+
+.modal-ok-button {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: rgba(135, 51, 255, 0.8); /* 半透明背景 */
+  border: none;
+  border-radius: 3.29vw; /* 23px at 700px width */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0.4vw 1.5vw rgba(135, 51, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible; /* 允许图片显示在按钮外 */
+  z-index: 2;
+}
+
+.modal-ok-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.modal-ok-button:hover:not(:disabled) {
+  background: rgba(157, 78, 255, 0.9);
+  transform: translateY(-0.2vw);
+  box-shadow: 0 0.6vw 2vw rgba(135, 51, 255, 0.4);
+}
+
+.modal-ok-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ok-button-text {
+  position: relative;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
+  font-size: 2.29vw; /* 16px at 700px width */
+  text-shadow: 0 0.2vw 0.4vw rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  text-align: center;
+}
+
+/* 弹窗动画 */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: scale(0.8) translateY(-2vw);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 新的title和button SVG样式 */
+.modal-title-img {
+  width: 17vw;
+  height: 10vh;
+  object-fit: contain;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1005;
+}
+
+.modal-title-img:hover {
+  transform: scale(1.05);
+}
+
+.modal-button-img {
+  width: 20vw;
+  height: 7vh;
+  object-fit: contain;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1005;
+}
+
+.modal-button-img:hover {
+  transform: scale(1.05);
+}
+
+/* 弹窗响应式设计 */
+@media (max-width: 768px) {
+  .congratulations-title {
+    font-size: max(2.86vw, 18px);
+  }
+
+  .congratulations-subtitle {
+    font-size: max(1.71vw, 11px);
+  }
+
+  .title-text {
+    font-size: max(2vw, 12px);
+  }
+
+  .ok-button-text {
+    font-size: max(2.29vw, 14px);
+  }
+
+  .modal-ok-button {
+    border-radius: max(3.29vw, 18px);
+  }
+
+  .modal-content {
+    border-radius: max(1.14vw, 8px);
+  }
+}
+
+@media (max-width: 480px) {
+  .congratulations-title {
+    font-size: max(3.5vw, 16px);
+  }
+
+  .congratulations-subtitle {
+    font-size: max(2.2vw, 10px);
+  }
+
+  .title-text {
+    font-size: max(2.5vw, 11px);
+  }
+
+  .ok-button-text {
+    font-size: max(3vw, 12px);
+  }
+
+  .modal-ok-button {
+    border-radius: max(4vw, 15px);
+  }
+
+  .modal-content {
+    border-radius: max(1.5vw, 6px);
+  }
+}
+
+@media (min-width: 1920px) {
+  .congratulations-title {
+    font-size: min(2.86vw, 55px);
+  }
+
+  .congratulations-subtitle {
+    font-size: min(1.71vw, 33px);
+  }
+
+  .title-text {
+    font-size: min(2vw, 38px);
+  }
+
+  .ok-button-text {
+    font-size: min(2.29vw, 44px);
+  }
+
+  .modal-ok-button {
+    border-radius: min(3.29vw, 63px);
+  }
+
+  .modal-content {
+    border-radius: min(1.14vw, 22px);
+  }
+}
+
+/* Thank You弹窗基础样式 */
+.thank-you-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modalFadeIn 0.5s ease-out;
+}
+
+.thank-you-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1001;
+}
+
+.thank-you-modal {
+  position: relative;
+  width: 50.29vw;
+  height: 75vh;
+  z-index: 1002;
+  animation: modalSlideIn 0.5s ease-out;
+}
+
+/* Thank You弹窗内容容器 */
+.thank-you-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 1.14vw; /* 8px at 700px width */
+  box-shadow: 0 0.8vw 3.2vw rgba(0, 0, 0, 0.3);
+  z-index: 1004;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+/* Thank You主要内容区域 - 独立样式 */
+.thank-you-main-content {
+  width: 100%;
+  height: 50%; /* 占用中间区域 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2% 5%;
+  z-index: 1005;
+  margin-bottom: 2%;
+}
+
+/* Thank You主标题 */
+.thank-you-main-title {
+  margin: 0 0 1.14vw 0;
+  padding: 0;
+  color: transparent;
+  background: linear-gradient(135deg, #ff5ea7 9.96%, #c85aff 54.33%, #5a74ff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 2.86vw; /* 20px at 700px width */
+  text-align: center;
+  line-height: 1.22;
+}
+
+/* Thank You副标题 */
+.thank-you-subtitle {
+  margin: 0 0 1.71vw 0;
+  padding: 0;
+  color: transparent;
+  background: linear-gradient(135deg, #ff5ea7 9.96%, #c85aff 54.33%, #5a74ff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 2vw; /* 14px at 700px width */
+  text-align: center;
+  line-height: 1.22;
+}
+
+/* 二维码区域 */
+.thank-you-qrcode {
+  width: 25.85%; /* 91/352 相对于弹窗宽度 */
+  aspect-ratio: 1;
+}
+
+.qrcode-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0.57vw; /* 4px at 700px width */
+}
+
+/* Thank You弹窗响应式设计 */
+@media (max-width: 768px) {
+  .thank-you-main-title {
+    font-size: max(2.86vw, 18px);
+  }
+
+  .thank-you-subtitle {
+    font-size: max(2vw, 12px);
+  }
+
+  .thank-you-content {
+    border-radius: max(1.14vw, 8px);
+  }
+
+  .qrcode-img {
+    border-radius: max(0.57vw, 4px);
+  }
+}
+
+@media (max-width: 480px) {
+  .thank-you-modal {
+    height: 80%;
+  }
+
+  .thank-you-main-title {
+    font-size: max(3.5vw, 16px);
+  }
+
+  .thank-you-subtitle {
+    font-size: max(2.5vw, 11px);
+  }
+
+  .thank-you-content {
+    border-radius: max(1.5vw, 6px);
+  }
+
+  .qrcode-img {
+    border-radius: max(0.8vw, 3px);
+  }
+}
+
+@media (min-width: 1920px) {
+  .thank-you-main-title {
+    font-size: min(2.86vw, 55px);
+  }
+
+  .thank-you-subtitle {
+    font-size: min(2vw, 38px);
+  }
+
+  .thank-you-content {
+    border-radius: min(1.14vw, 22px);
+  }
+
+  .qrcode-img {
+    border-radius: min(0.57vw, 11px);
+  }
+}
