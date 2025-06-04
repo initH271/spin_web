@@ -650,7 +650,7 @@ body {
   font-size: 2.86vw; /* 20px at 700px width */
   text-align: center;
   line-height: 1.22;
-  margin-bottom: 0.86vw; /* 6px at 700px width */
+  padding-bottom: 0.86vh; /* 6px at 700px width */
 }
 
 /* 说明文字 - 水平居中 */
@@ -667,6 +667,7 @@ body {
   text-align: center;
   line-height: 1.32;
   width: 60.51vw; /* 213/352 */
+  padding-bottom: 0.86vh; /* 6px at 700px width */
 }
 
 /* OK按钮区域 - 根据Figma相对位置：103,127,146,28 */
@@ -1006,6 +1007,7 @@ body {
   font-size: 2.86vw; /* 20px at 700px width */
   text-align: center;
   line-height: 1.22;
+  padding-bottom: 0.86vh; /* 6px at 700px width */
 }
 
 /* Thank You副标题 */
@@ -1021,6 +1023,7 @@ body {
   font-size: 2vw; /* 14px at 700px width */
   text-align: center;
   line-height: 1.22;
+  padding-bottom: 0.86vh; /* 6px at 700px width */
 }
 
 /* 二维码区域 */
