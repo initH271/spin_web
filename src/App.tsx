@@ -19,7 +19,7 @@ import coinStaf1Img from "./assets/coin_staf_1.svg";
 import coinStaf2Img from "./assets/coin_staf_2.svg";
 // 弹窗相关资源
 import titleImg from "./assets/title.svg";
-import buttonImg from "./assets/button.svg";
+// import buttonImg from "./assets/button.svg";
 import qrcodeImg from "./assets/qrcode.png";
 
 function App() {
