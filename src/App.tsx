@@ -20,7 +20,7 @@ import coinStaf2Img from "./assets/coin_staf_2.svg";
 // 弹窗相关资源
 import titleImg from "./assets/title.svg";
 // import buttonImg from "./assets/button.svg";
-import qrcodeImg from "./assets/qrcode.png";
+import qrcodeImg from "./assets/qrcode.svg";
 
 function App() {
   const [isSpinning, setIsSpinning] = useState(false);
