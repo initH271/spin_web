@@ -671,12 +671,76 @@ body {
 
 /* OK按钮区域 - 根据Figma相对位置：103,127,146,28 */
 .modal-button-group {
-  width: 20vw; /* 146/352 */
-  height: 7vh; /* 28/168 */
+  width: 20vw;
+  height: 7vh;
+  cursor: pointer;
+  transition: all 0.3s ease;
   z-index: 1005;
+
+  text-align: center;
+  color: #ffffff;
+
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 23px;
+}
+
+.modal-button-group:hover {
+  transform: scale(1.05);
+}
+
+.modal-button-base5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20vw;
+  height: 7vh;
+  background: #8733ff;
+  border-radius: 23px;
+}
+.modal-button-base8 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20vw;
+  height: 7vh;
+  background: linear-gradient(180deg, #ab71ff 1.79%, rgba(135, 51, 255, 0) 21.43%);
+  border-radius: 23px;
+}
+
+.modal-button-base9 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20vw;
+  height: 7vh;
+  background: linear-gradient(180deg, #6f14f1 1.79%, rgba(135, 51, 255, 0) 50%);
+  border-radius: 23px;
+  transform: rotate(-180deg);
+}
+
+.modal-button-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1005;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 2.05vw;
+  line-height: 2.29vw;
+  color: #ffffff;
+}
+.modal-button-coin-staf{
+  position: absolute;
+  top: 50%;
+  right: 1.14vw;
+  transform: translateY(-50%);
+  z-index: 1005;
+  height: 80%;
 }
 
 /* 按钮装饰图片 - coin_staf_1.png，靠右显示 */
