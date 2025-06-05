@@ -92,66 +92,81 @@ function App() {
         <div className="background-image-8024534"></div>
         <div className="background-gradient-bar"></div>
 
-        {/* Logo */}
-        <div className="logo-section">
-          <img src={logoImg} alt="EB&LM Logo" className="logo-image" />
-        </div>
-
-        {/* 转盘主体区域 (spin_wheel group) */}
-        <div className="spin-wheel-group">
-          {/* spin_plate_base - 转盘底座 */}
-          <div className="spin-plate-base">
-            <img src={spinPlateBaseImg} alt="Spin Plate Base" className="spin-plate-base-img" />
+        <div className="main-left-section">
+          {/* Logo */}
+          <div className="logo-section">
+            <img src={logoImg} alt="EB&LM Logo" className="logo-image" />
           </div>
-
-          {/* spin_plate - 可旋转的转盘 */}
-          <div
-            ref={wheelRef}
-            className={`spin-plate ${isSpinning ? "spinning" : ""}`}
-            style={
-              {
-                transform: `rotate(${rotation}deg)`,
-                "--rotation": `${rotation}deg`,
-              } as React.CSSProperties & { "--rotation": string }
-            }>
-            <img src={spinPlateImg} alt="Spin Plate" className="spin-plate-img" />
-
-            {/* 转盘文字 - BigWin - 保持竖直 */}
-            <div className="prize-text bigwin-text" style={{ transform: `rotate(${-rotation}deg)` }}>
-              Big
-              <br />
-              Win
-            </div>
-
-            {/* 转盘文字 - Thank You - 保持竖直 */}
-            <div className="prize-text thankyou-text" style={{ transform: `rotate(${-rotation}deg)` }}>
-              Thank
-              <br />
-              You
-            </div>
+          {/* Lucky Wheel 文字 */}
+          <div className="lucky-wheel-group">
+            <img src={luckyWheelImg} alt="Lucky Wheel" className="lucky-wheel-img" />
           </div>
-
-          {/* spin_pointer - 中心指针按钮 */}
-          <div className="spin-pointer-group">
-            <button
-              className={`spin-pointer-button ${isSpinning ? "spinning" : ""}`}
-              onClick={spinWheel}
-              disabled={isSpinning}>
-              <img src={spinPointerImg} alt="Spin Pointer" className="spin-pointer-img" />
+          {/* 底部按钮 */}
+          <div className="bottom-button-section">
+            <button className="action-button" onClick={spinWheel} disabled={isSpinning}>
+              <span className="button-text">{isSpinning ? "Spinning..." : "Spin to Win Now!"}</span>
             </button>
           </div>
         </div>
+        <div className="main-right-section">
+          {/* 转盘主体区域 (spin_wheel group) */}
+          <div className="spin-wheel-group">
+            {/* spin_plate_base - 转盘底座 */}
+            <div className="spin-plate-base">
+              <img src={spinPlateBaseImg} alt="Spin Plate Base" className="spin-plate-base-img" />
+            </div>
 
-        {/* spin_wheel_base - 底部装饰条 */}
-        <div className="spin-wheel-base">
-          <img src={spinWheelBaseImg} alt="Spin Wheel Base" className="spin-wheel-base-img" />
-        </div>
+            {/* spin_plate - 可旋转的转盘 */}
+            <div
+              ref={wheelRef}
+              className={`spin-plate ${isSpinning ? "spinning" : ""}`}
+              style={
+                {
+                  transform: `rotate(${rotation}deg)`,
+                  "--rotation": `${rotation}deg`,
+                } as React.CSSProperties & { "--rotation": string }
+              }>
+              <img src={spinPlateImg} alt="Spin Plate" className="spin-plate-img" />
 
-        {/* 底部按钮 */}
-        <div className="bottom-button-section">
-          <button className="action-button" onClick={spinWheel} disabled={isSpinning}>
-            <span className="button-text">{isSpinning ? "Spinning..." : "Spin to Win Now!"}</span>
-          </button>
+              {/* 转盘文字 - BigWin - 保持竖直 */}
+              <div className="prize-text bigwin-text" style={{ transform: `rotate(${-rotation}deg)` }}>
+                Big
+                <br />
+                Win
+              </div>
+
+              {/* 转盘文字 - Thank You - 保持竖直 */}
+              <div className="prize-text thankyou-text" style={{ transform: `rotate(${-rotation}deg)` }}>
+                Thank
+                <br />
+                You
+              </div>
+            </div>
+
+            {/* spin_pointer - 中心指针按钮 */}
+            <div className="spin-pointer-group">
+              <button
+                className={`spin-pointer-button ${isSpinning ? "spinning" : ""}`}
+                onClick={spinWheel}
+                disabled={isSpinning}>
+                <img src={spinPointerImg} alt="Spin Pointer" className="spin-pointer-img" />
+              </button>
+            </div>
+          </div>
+
+          {/* spin_wheel_base - 底部装饰条 */}
+          <div className="spin-wheel-base">
+            {/* 金币堆装饰 */}
+            <div className="coin-staf-1">
+              <img src={coinStaf1Img} alt="Coin Staff 1" />
+            </div>
+            <div className="coin-staf-2">
+              <img src={coinStaf2Img} alt="Coin Staff 2" />
+            </div>
+            <div className="spin-wheel-base-img-container">
+              <img src={spinWheelBaseImg} alt="Spin Wheel Base" className="spin-wheel-base-img" />
+            </div>
+          </div>
         </div>
 
         {/* 装饰元素 */}
@@ -180,19 +195,6 @@ function App() {
           <div className="gold-coin-4">
             <img src={goldCoin4Img} alt="Gold Coin 4" />
           </div>
-
-          {/* 金币堆装饰 */}
-          <div className="coin-staf-1">
-            <img src={coinStaf1Img} alt="Coin Staff 1" />
-          </div>
-          <div className="coin-staf-2">
-            <img src={coinStaf2Img} alt="Coin Staff 2" />
-          </div>
-        </div>
-
-        {/* Lucky Wheel 文字 */}
-        <div className="lucky-wheel-group">
-          <img src={luckyWheelImg} alt="Lucky Wheel" className="lucky-wheel-img" />
         </div>
 
         {/* Congratulations 弹窗 */}
@@ -203,31 +205,27 @@ function App() {
 
             {/* 弹窗主体 */}
             <div className="congratulations-modal">
-              {/* 弹窗内容容器 */}
-              <div className="modal-content">
-                {/* 标题区域 - 整个使用title.svg */}
-                <img src={titleImg} alt="Title" className="modal-title-img" onClick={closeCongratulations} />
+              {/* 标题区域 - 整个使用title.svg */}
+              <img src={titleImg} alt="Title" className="modal-title-img" onClick={closeCongratulations} />
 
-                {/* 主要内容区域 */}
-                <div className="modal-main-content">
-                  <h2 className="congratulations-title">Congratulations!</h2>
-                  <p className="congratulations-subtitle">
-                    Please show the screen to our staff
-                    <br />
-                    before tapping "OK"
-                  </p>
-                </div>
-
-                {/* OK按钮 - 整个使用button.svg */}
-                {/* <img src={buttonImg} alt="OK Button" className="modal-button-img" onClick={closeCongratulations} /> */}
+              {/* 主要内容区域 */}
+              <div className="modal-main-content">
+                <h2 className="congratulations-title">Congratulations!</h2>
+                <p className="congratulations-subtitle">
+                  Please show the screen to our staff
+                  <br />
+                  before tapping "OK"
+                </p>
                 <div className="modal-button-group" onClick={closeCongratulations}>
                   <div className="modal-button-base5"></div>
                   <div className="modal-button-base8"></div>
                   <div className="modal-button-base9"></div>
-                  <img src={coinStaf1Img} alt="OK Button" className="modal-button-coin-staf" onClick={closeCongratulations} />
                   <div className="modal-button-text">OK</div>
                 </div>
               </div>
+
+              {/* OK按钮 - 整个使用button.svg */}
+              {/* <img src={buttonImg} alt="OK Button" className="modal-button-img" onClick={closeCongratulations} /> */}
             </div>
           </div>
         )}
@@ -240,29 +238,22 @@ function App() {
 
             {/* 弹窗主体 */}
             <div className="thank-you-modal">
-              {/* 弹窗内容容器 */}
-              <div className="thank-you-content">
-                {/* 标题区域 - 整个使用title.svg */}
-                <img src={titleImg} alt="Title" className="modal-title-img" onClick={closeThankYou} />
+              {/* 标题区域 - 整个使用title.svg */}
+              <img src={titleImg} alt="Title" className="modal-title-img" onClick={closeThankYou} />
 
-                {/* Thank You主要内容区域 - 独立样式 */}
-                <div className="thank-you-main-content">
-                  <h2 className="thank-you-main-title">Thank You For Participate</h2>
-                  <p className="thank-you-subtitle">More Gifts Here!</p>
+              {/* Thank You主要内容区域 - 独立样式 */}
+              <div className="thank-you-main-content">
+                <h2 className="thank-you-main-title">Thank You For Participate</h2>
+                <p className="thank-you-subtitle">More Gifts Here!</p>
 
-                  {/* 二维码区域 */}
-                  <div className="thank-you-qrcode">
-                    <img src={qrcodeImg} alt="QR Code" className="qrcode-img" />
-                  </div>
+                {/* 二维码区域 */}
+                <div className="thank-you-qrcode">
+                  <img src={qrcodeImg} alt="QR Code" className="qrcode-img" />
                 </div>
-
-                {/* OK按钮 - 整个使用button.svg */}
-                {/* <img src={buttonImg} alt="OK Button" className="modal-button-img" onClick={closeThankYou} /> */}
                 <div className="modal-button-group" onClick={closeThankYou}>
                   <div className="modal-button-base5"></div>
                   <div className="modal-button-base8"></div>
                   <div className="modal-button-base9"></div>
-                  <img src={coinStaf1Img} alt="OK Button" className="modal-button-coin-staf" onClick={closeThankYou} />
                   <div className="modal-button-text">OK</div>
                 </div>
               </div>
