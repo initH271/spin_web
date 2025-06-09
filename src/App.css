@@ -257,15 +257,16 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  /* width: 100%; */
+  /* height: 100%; */
+  aspect-ratio: 1;
   z-index: 6;
 }
 
 .spin-plate-base-img {
-  width: 99%;
-  height: 99%;
-  object-fit: fill;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 /* spin_plate - 可旋转的转盘 - 相对位置 */
@@ -284,8 +285,8 @@ body {
 }
 
 .spin-plate-img {
-  width: 100%;
-  height: 100%;
+  width: 99%;
+  height: 99%;
   object-fit: contain;
 }
 
