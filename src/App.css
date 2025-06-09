@@ -336,7 +336,7 @@ body {
 }
 
 .spin-pointer-button:disabled {
-  opacity: 0.7;
+  opacity: 0.9;
   cursor: not-allowed;
 }
 
