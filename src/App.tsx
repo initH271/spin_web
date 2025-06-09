@@ -3,7 +3,7 @@ import "./App.css";
 
 // 导入所有SVG资源
 // import spinPlateBaseImg from "./assets/spin_wheel_img.png";
-import spinPlateImg from "./assets/spin_plate.svg";
+import spinPlateImg from "./assets/spin-plate-img.svg";
 import spinPointerImg from "./assets/spin_pointer.svg";
 import luckyWheelImg from "./assets/lucky_wheel.png";
 import logoImg from "./assets/logo.svg";
@@ -123,20 +123,6 @@ function App() {
                       } as React.CSSProperties & { "--rotation": string }
                     }>
                     <img src={spinPlateImg} alt="Spin Plate" className="spin-plate-img" />
-
-                    {/* 转盘文字 - BigWin - 保持竖直 */}
-                    <div className="prize-text bigwin-text" style={{ transform: `rotate(${-rotation}deg)` }}>
-                      Big
-                      <br />
-                      Win
-                    </div>
-
-                    {/* 转盘文字 - Thank You - 保持竖直 */}
-                    <div className="prize-text thankyou-text" style={{ transform: `rotate(${-rotation}deg)` }}>
-                      Thank
-                      <br />
-                      You
-                    </div>
                   </div>
                 </div>
               </div>
