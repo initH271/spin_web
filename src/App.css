@@ -261,7 +261,7 @@ body {
   width: 100%;
   background: url('./assets/spin_wheel_img.png') no-repeat center center;
   background-size: 100% 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 0.9458;
   z-index: 6;
 }
 
