@@ -125,7 +125,7 @@ function App() {
                     <img src={spinPlateImg} alt="Spin Plate" className="spin-plate-img" />
                     <div className="spin-plate-base-content">
                       {/* spin_pointer - 中心指针按钮 */}
-                      <div 
+                      <div
                         className="spin-pointer-group"
                         style={
                           {
