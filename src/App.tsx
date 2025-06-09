@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import "./App.css";
 
 // 导入所有SVG资源
-import spinWheelBaseImg from "./assets/spin_wheel_base.svg";
 import spinPlateBaseImg from "./assets/spin_wheel_img.png";
 import spinPlateImg from "./assets/spin_plate.svg";
 import spinPointerImg from "./assets/spin_pointer.svg";
@@ -15,8 +14,6 @@ import goldCoin1Img from "./assets/gold_coin_1.svg";
 import goldCoin2Img from "./assets/gold_coin_2.svg";
 import goldCoin3Img from "./assets/gold_coin_3.svg";
 import goldCoin4Img from "./assets/gold_coin_4.svg";
-import coinStaf1Img from "./assets/coin_staf_1.svg";
-import coinStaf2Img from "./assets/coin_staf_2.svg";
 // 弹窗相关资源
 import titleImg from "./assets/title.svg";
 // import buttonImg from "./assets/button.svg";
