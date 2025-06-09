@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import "./App.css";
 
 // 导入所有SVG资源
-import spinPlateBaseImg from "./assets/spin_wheel_img.png";
+// import spinPlateBaseImg from "./assets/spin_wheel_img.png";
 import spinPlateImg from "./assets/spin_plate.svg";
 import spinPointerImg from "./assets/spin_pointer.svg";
 import luckyWheelImg from "./assets/lucky_wheel.png";
