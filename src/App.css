@@ -284,6 +284,14 @@ body {
   z-index: 7;
 }
 
+.spin-plate-base-content {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .spin-plate.spinning {
   transition: transform 3s cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -296,13 +304,16 @@ body {
 
 /* spin_pointer - 中心指针按钮 - 相对位置 */
 .spin-pointer-group {
-  /* position: absolute;
-  top: 34.94%; 
-  right: 37.1%; */
-  /* width: 20.22%; */
-  height: 23.7%; /* 93.62/395 */
+  position: absolute;
   scale: 1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   z-index: 15;
+  width: 30%;
+  min-width: 73px;
+  /* 添加反向旋转以保持指针方向不变 */
+  transition: transform 3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .spin-pointer-button {
