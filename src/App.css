@@ -878,7 +878,7 @@ body {
   font-weight: 400;
   font-size: 2vw; /* 14px at 700px width */
   text-align: center;
-  line-height: 1.22;
+  /* line-height: 1.22; */
 }
 
 /* 二维码区域 */
