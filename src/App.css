@@ -252,8 +252,6 @@ body {
   object-fit: contain;
 }
 
-
-
 /* spin_plate_base - 转盘底座 */
 .spin-plate-base {
   position: absolute;
@@ -265,9 +263,9 @@ body {
 }
 
 .spin-plate-base-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  width: 99%;
+  height: 99%;
+  object-fit: fill;
 }
 
 /* spin_plate - 可旋转的转盘 - 相对位置 */
@@ -512,8 +510,7 @@ body {
   box-shadow: 0 0.8vw 3.2vw rgba(0, 0, 0, 0.3);
   overflow: hidden;
   animation: modalSlideIn 0.5s ease-out;
-  display: flex
-;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -559,7 +556,6 @@ body {
   justify-content: center;
   z-index: 1005;
   gap: 1.5vh;
-
 }
 
 /* Congratulations 主标题 - 渐变色，水平居中 */
@@ -579,7 +575,7 @@ body {
 
 /* 说明文字 - 水平居中 */
 .congratulations-subtitle {
-  margin: 20px 0 ;
+  margin: 20px 0;
   padding: 0;
   color: transparent;
   background: linear-gradient(135deg, #ff5ea7 9.96%, #c85aff 54.33%, #5a74ff 100%);
