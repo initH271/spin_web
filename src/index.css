@@ -3,22 +3,42 @@
 #root {
   width: 100vw;
   height: 100vh;
+  background: linear-gradient(114.33deg, #ff5ea7 26.13%, #c85aff 61.46%, #5a74ff 97.84%);
+
+  @media (min-width: 768px) {
+    background: linear-gradient(114.33deg, #ff5ea7 26.13%, #c85aff 61.46%, #5a74ff 97.84%);
+  }
+}
+
+@font-face {
+  font-family: "Montserrat Alternates";
+  src: url("./assets/fonts/MontserratAlternates-Regular.ttf") format("truetype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Montserrat Alternates";
+  src: url("./assets/fonts/MontserratAlternates-Bold.ttf") format("truetype");
+  font-weight: bold;
+}
+@font-face {
+  font-family: "Montserrat Alternates";
+  src: url("./assets/fonts/MontserratAlternates-Black.ttf") format("truetype");
+  font-weight: 900;
 }
 
 @layer components {
   .text-shadow-glow {
     text-shadow: 
-     /* 右方阴影 */
-    4px 0 7.2px #CA94FF,
-    6px 0 11.7px #A851FF,
-    /* 左方阴影 */
-    -4px 0 7.2px #A851FF,
-    -6px 0 11.7px #CA94FF,
-    /* 下方阴影（原始） */
-    0 4px 7.2px #A851FF,
-    0 6px 11.7px #CA94FF,
-    /* 上方阴影 */
-    0 -4px 7.2px #A851FF,
-    0 -6px 11.7px #CA94FF;
+     /* 右方阴影 */ 4px 0 7.2px #ca94ff, 6px 0 11.7px #a851ff, /* 左方阴影 */ -4px 0 7.2px #a851ff,
+      -6px 0 11.7px #ca94ff, /* 下方阴影（原始） */ 0 4px 7.2px #a851ff, 0 6px 11.7px #ca94ff,
+      /* 上方阴影 */ 0 -4px 7.2px #a851ff, 0 -6px 11.7px #ca94ff;
+  }
+
+  .bg-gradient-pc {
+    background: linear-gradient(114.33deg, #ff5ea7 26.13%, #c85aff 61.46%, #5a74ff 97.84%);
+  }
+  .bg-gradient-mobile {
+    background: linear-gradient(114.33deg, #ff5ea7 26.13%, #c85aff 61.46%, #5a74ff 97.84%);
   }
 }

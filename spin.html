@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>转盘抽奖</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+        .wheel-container {
+            position: relative;
+            width: 90vw;
+            height: 90vw;
+            max-width: 400px;
+            max-height: 400px;
+            min-width: 280px;
+            min-height: 280px;
+            border-radius: 50%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 50;
+        }
+        .center-spin-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 25%;
+            height: 25%;
+            min-width: 80px;
+            min-height: 80px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 6px solid white;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            font-size: 1rem;
+            padding: 0;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .center-spin-button::after {
+            content: '';
+            position: absolute;
+            top: -28px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 28px solid #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 sm:p-8">
+
+    <main class="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16 w-full max-w-6xl mx-auto">
+        
+        <div class="text-center lg:text-left lg:w-1/3">
+            <h1 class="text-4xl lg:text-5xl font-bold text-gray-800">幸运大转盘</h1>
+            <p class="text-gray-600 mt-4 text-lg">
+                点击“开始抽奖”按钮，指针将持续旋转等待开奖。后台确认奖品后，指针将加速冲向您的专属好礼！
+            </p>
+        </div>
+
+        <div class="flex flex-col items-center">
+            <div class="wheel-container" id="wheelContainer">
+                <canvas id="prizeWheel"></canvas>
+                <button id="spinButton" class="center-spin-button bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed">
+                    <span id="spinButtonText">开始<br>抽奖</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="resultModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center invisible opacity-0 modal">
+        <div class="bg-white rounded-lg p-8 shadow-2xl text-center transform scale-95 transition-transform duration-300">
+            <h2 class="text-2xl font-bold mb-4">恭喜你！</h2>
+            <p class="text-gray-700 text-xl mb-6">你抽中了: <span id="prizeResult" class="font-bold text-red-500"></span></p>
+            <button id="closeModalButton" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-lg">
+                关闭
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        const prizes = [
+            { name: '咖啡杯', color: '#fecaca', imgUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c' },
+            { name: '谢谢参与', color: '#ffffff' },
+            { name: '耳机', color: '#fed7aa', imgUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e' },
+            { name: '谢谢参与', color: '#ffffff' },
+            { name: '手表', color: '#bbf7d0', imgUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30' },
+            { name: '谢谢参与', color: '#ffffff' },
+            { name: '笔记本', color: '#bfdbfe', imgUrl: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796' },
+            { name: '书', color: '#e9d5ff', imgUrl: 'https://images.unsplash.com/photo-1510127034180-4613d7d58e6e' }
+        ];
+        const numPrizes = prizes.length;
+        const arc = (2 * Math.PI) / numPrizes;
+        const arcDegrees = 360 / numPrizes;
+
+        // --- Image Preloading ---
+        const loadedImages = {};
+        function preloadImages(callback) {
+            const prizeImages = prizes.filter(p => p.imgUrl);
+            if (prizeImages.length === 0) {
+                callback();
+                return;
+            }
+            let loadedCount = 0;
+            prizeImages.forEach(p => {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.src = p.imgUrl;
+                img.onload = () => {
+                    loadedImages[p.imgUrl] = img;
+                    loadedCount++;
+                    if (loadedCount === prizeImages.length) callback();
+                };
+                img.onerror = () => {
+                    loadedCount++;
+                    if (loadedCount === prizeImages.length) callback();
+                }
+            });
+        }
+
+        // --- Modal Logic ---
+        const modal = document.getElementById('resultModal');
+        const prizeResult = document.getElementById('prizeResult');
+        const closeModalButton = document.getElementById('closeModalButton');
+        let activeWheelCleanup = null;
+
+        function showResult(prizeName, cleanupCallback) {
+            prizeResult.textContent = prizeName;
+            modal.classList.remove('invisible', 'opacity-0');
+            modal.querySelector('div').classList.remove('scale-95');
+            activeWheelCleanup = cleanupCallback;
+        }
+
+        function hideResult() {
+            modal.classList.add('invisible', 'opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            if (activeWheelCleanup) {
+                activeWheelCleanup();
+                activeWheelCleanup = null;
+            }
+        }
+        closeModalButton.addEventListener('click', hideResult);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) hideResult();
+        });
+
+        // --- Wheel Logic ---
+        function initWheel() {
+            const container = document.getElementById('wheelContainer');
+            const canvas = document.getElementById('prizeWheel');
+            const spinButton = document.getElementById('spinButton');
+            const spinButtonText = document.getElementById('spinButtonText');
+            const ctx = canvas.getContext('2d');
+            let isSpinning = false;
+            let currentRotation = 0;
+            let waitingAnimationId = null;
+
+            function resizeCanvas() {
+                const size = container.clientWidth;
+                canvas.width = size;
+                canvas.height = size;
+                draw();
+            }
+
+            function draw(selectedIndex = -1) {
+                const W = canvas.width;
+                const H = canvas.height;
+                ctx.clearRect(0, 0, W, H);
+                ctx.save();
+                ctx.translate(W / 2, H / 2);
+                ctx.rotate(-Math.PI / 2);
+                
+                prizes.forEach((prize, i) => {
+                    const angle = i * arc;
+                    ctx.beginPath();
+                    ctx.fillStyle = prize.color;
+                    ctx.moveTo(0, 0);
+                    ctx.arc(0, 0, W / 2 - 1, angle, angle + arc);
+                    ctx.lineTo(0, 0);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    ctx.save();
+                    const textAngle = angle + arc / 2;
+                    ctx.rotate(textAngle);
+                    
+                    if (prize.imgUrl && loadedImages[prize.imgUrl]) {
+                        const img = loadedImages[prize.imgUrl];
+                        const imgSize = W * 0.1;
+                        const imgX = W / 2 * 0.6;
+                        const imgY = -imgSize / 2;
+                        ctx.drawImage(img, imgX, imgY, imgSize, imgSize);
+                    } else {
+                        ctx.fillStyle = '#374151';
+                        ctx.font = `bold ${W * 0.045}px 'Noto Sans SC'`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(prize.name, W / 4, 0);
+                    }
+                    ctx.restore();
+                });
+
+                if (selectedIndex !== -1) {
+                    const angle = selectedIndex * arc;
+                    ctx.save();
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.arc(0, 0, W / 2 - 1, angle, angle + arc);
+                    ctx.lineTo(0, 0);
+                    ctx.fill();
+                    ctx.restore();
+                }
+                ctx.restore();
+            }
+
+            function fetchPrizeFromServer() {
+                console.log("Fetching prize from server...");
+                return new Promise(resolve => {
+                    const delay = Math.random() * 2000 + 1000;
+                    setTimeout(() => {
+                        const winningIndex = Math.floor(Math.random() * numPrizes);
+                        console.log(`Server responded with winning index: ${winningIndex}`);
+                        resolve(winningIndex);
+                    }, delay);
+                });
+            }
+
+            function startWaitingSpin() {
+                const waitingSpeed = 720; // degrees per second
+                let lastTime = null;
+
+                function animate(time) {
+                    if (lastTime === null) lastTime = time;
+                    const deltaTime = time - lastTime;
+                    lastTime = time;
+
+                    // REFACTOR: Let rotation accumulate instead of using modulo.
+                    currentRotation += (waitingSpeed * deltaTime) / 1000;
+                    
+                    spinButton.style.transform = `translate(-50%, -50%) rotate(${currentRotation}deg)`;
+                    const normalizedAngle = currentRotation % 360;
+                    const currentIndex = Math.floor(normalizedAngle / arcDegrees);
+                    draw(currentIndex);
+
+                    waitingAnimationId = requestAnimationFrame(animate);
+                }
+                waitingAnimationId = requestAnimationFrame(animate);
+            }
+
+            function stopWaitingSpin() {
+                cancelAnimationFrame(waitingAnimationId);
+                waitingAnimationId = null;
+            }
+
+            async function spin() {
+                if (isSpinning) return;
+                isSpinning = true;
+                spinButton.disabled = true;
+                spinButtonText.innerHTML = "抽奖中...";
+                draw();
+
+                startWaitingSpin();
+
+                const winningIndex = await fetchPrizeFromServer();
+                const winningPrize = prizes[winningIndex];
+
+                stopWaitingSpin();
+
+                // REFACTOR: Simplified and more robust rotation calculation.
+                const prizeCenterAngle = (winningIndex * arcDegrees) + (arcDegrees / 2);
+                const spinsForDeceleration = 2;
+                
+                const nextFullSpin = Math.ceil(currentRotation / 360) * 360;
+                const finalRotation = nextFullSpin + (spinsForDeceleration * 360) + prizeCenterAngle;
+
+                const duration = 6000;
+                let startTime = null;
+                const startRotation = currentRotation;
+
+                function animateFinalSpin(currentTime) {
+                    if (startTime === null) startTime = currentTime;
+                    const elapsedTime = currentTime - startTime;
+                    const progress = Math.min(elapsedTime / duration, 1);
+                    const easedProgress = 1 - Math.pow(1 - progress, 4);
+
+                    const animatedRotation = startRotation + (finalRotation - startRotation) * easedProgress;
+                    
+                    spinButton.style.transform = `translate(-50%, -50%) rotate(${animatedRotation}deg)`;
+                    const normalizedAngle = animatedRotation % 360;
+                    const currentIndex = Math.floor(normalizedAngle / arcDegrees);
+                    draw(currentIndex);
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animateFinalSpin);
+                    } else {
+                        // REFACTOR: Merged onSpinEnd logic here for simplicity.
+                        currentRotation = animatedRotation;
+                        isSpinning = false;
+                        spinButton.disabled = false;
+                        spinButtonText.innerHTML = "开始<br>抽奖";
+                        draw(winningIndex);
+                        setTimeout(() => showResult(winningPrize.name, () => draw()), 200);
+                    }
+                }
+                requestAnimationFrame(animateFinalSpin);
+            }
+            
+            spinButton.addEventListener('click', spin);
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+        }
+
+        // --- Initialization ---
+        preloadImages(() => {
+            initWheel();
+        });
+    </script>
+</body>
+</html>
