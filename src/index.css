@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+@layer components {
+  .text-shadow-glow {
+    text-shadow: 
+     /* 右方阴影 */
+    4px 0 7.2px #CA94FF,
+    6px 0 11.7px #A851FF,
+    /* 左方阴影 */
+    -4px 0 7.2px #A851FF,
+    -6px 0 11.7px #CA94FF,
+    /* 下方阴影（原始） */
+    0 4px 7.2px #A851FF,
+    0 6px 11.7px #CA94FF,
+    /* 上方阴影 */
+    0 -4px 7.2px #A851FF,
+    0 -6px 11.7px #CA94FF;
+  }
+}
