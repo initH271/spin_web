@@ -28,8 +28,9 @@ function App() {
 
   // 使用首页hook
   const { homepageData } = useHomepage(wheelSlug);
-  
 
+  // 使用动态背景图片，如果没有则使用默认渐变
+  const backgroundImage = homepageData?.style?.background_image;
 
   // 自动弹出登录弹窗逻辑
   useEffect(() => {
@@ -38,7 +39,7 @@ function App() {
       const timer = setTimeout(() => {
         setIsAuthModalOpen(true);
       }, 500);
-      
+
       return () => clearTimeout(timer);
     }
   }, [isWheelPagePath, isLoggedIn, isAuthModalOpen]);
@@ -65,7 +66,20 @@ function App() {
   };
 
   return (
-    <div className="relative w-full min-h-[calc(375/812*100vw)] bg-gradient-mobile flex flex-col md:h-[calc(1080/1920*100vw)]">
+    <div
+      className={`relative w-full min-h-[calc(375/812*100vw)] flex flex-col md:min-h-[calc(1080/1920*100vw)] ${
+        backgroundImage ? "" : "bg-gradient-mobile"
+      }`}
+      style={
+        backgroundImage
+          ? {
+              backgroundImage: `url(${backgroundImage})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }
+          : undefined
+      }>
       {/* header */}
       <Header onLogin={() => setIsAuthModalOpen(true)} onMyPrizes={handleMyPrizes} />
       {/* content */}
@@ -75,10 +89,7 @@ function App() {
           <HeroSection />
 
           {/* spin plate */}
-          <SpinPlate 
-            prizes={homepageData?.prizes} 
-            wheelInstanceId={homepageData?.wheel_instance?.id}
-          />
+          <SpinPlate prizes={homepageData?.prizes} wheelInstanceId={homepageData?.wheel_instance?.id} />
 
           {/* action button */}
           <ActionButtons onMyPrizes={handleMyPrizes} />
@@ -100,7 +111,7 @@ function App() {
       {/* message modal */}
       <MessageModal
         isOpen={isMessageModalOpen}
-        messageType="Opps"
+        messageType="Oops"
         message="You missed the prize.
 Try again!"
         onClose={() => setIsMessageModalOpen(false)}
@@ -121,7 +132,7 @@ Try again!"
         onClose={() => setIsClaimTokenPrizeModalOpen(false)}
         onClaim={() => {}}
       />
-      
+
       {/* Toaster for notifications */}
       <Toaster position="top-center" />
     </div>

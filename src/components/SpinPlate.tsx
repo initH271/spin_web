@@ -51,8 +51,13 @@ const SpinPlate = ({ prizes: propPrizes, wheelInstanceId }: SpinPlateProps) => {
   const [showClaimPrizeModal, setShowClaimPrizeModal] = useState(false);
   const [showClaimTokenModal, setShowClaimTokenModal] = useState(false);
   
-  // 获取转盘状态更新函数
-  const { setSpinStatus } = useHomepageStore();
+  // 获取转盘状态更新函数和首页数据
+  const { setSpinStatus, homepageData } = useHomepageStore();
+  
+  // 使用动态图片资源，如果没有则使用默认图片
+  const wheelImage = homepageData?.style?.wheel_image || spinPlate;
+  const pointerImage = homepageData?.style?.pointer_image || spinPointer;
+  
   const loadedImages = useRef<Record<string, HTMLImageElement>>({});
   const waitingAnimationId = useRef<number | null>(null);
   const finalAnimationId = useRef<number | null>(null);
@@ -550,7 +555,7 @@ const SpinPlate = ({ prizes: propPrizes, wheelInstanceId }: SpinPlateProps) => {
       <div
         className="size-[calc(323.64/375*100vw)] flex flex-col items-center justify-center relative
       md:size-[calc(768/1920*100vw)]">
-        <img src={spinPlate} alt="spin plate" className="absolute inset-0" />
+        <img src={wheelImage} alt="spin plate" className="absolute inset-0 size-[calc(323.64/375*100vw)] md:size-[calc(768/1920*100vw)]" />
         <canvas
           ref={canvasRef}
           id="spin-plate"
@@ -561,7 +566,7 @@ const SpinPlate = ({ prizes: propPrizes, wheelInstanceId }: SpinPlateProps) => {
           className="size-[calc(150/375*100vw)] z-10 md:size-[calc(356/1920*100vw)]"
           style={{ transform: `rotate(${currentRotation}deg)` }}
           onClick={handleSpin}>
-          <img src={spinPointer} alt="spin pointer" className="size-full" />
+          <img src={pointerImage} alt="spin pointer" className="size-full" />
         </div>
       </div>
 

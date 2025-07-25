@@ -3,11 +3,7 @@
 #root {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(114.33deg, #ff5ea7 26.13%, #c85aff 61.46%, #5a74ff 97.84%);
-
-  @media (min-width: 768px) {
-    background: linear-gradient(114.33deg, #ff5ea7 26.13%, #c85aff 61.46%, #5a74ff 97.84%);
-  }
+  /* 移除默认背景渐变，现在使用动态背景图片 */
 }
 
 @font-face {

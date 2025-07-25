@@ -12,15 +12,19 @@ interface HeaderProps {
 
 const Header = ({ onLogin, onMyPrizes }: HeaderProps) => {
   const { user, isLoggedIn, logout } = useUserStore();
-  const { spinStatus } = useHomepageStore();
+  const { spinStatus, homepageData } = useHomepageStore();
   
   // 获取剩余转盘次数
   const remainingSpins = spinStatus?.remaining_count || 0;
+  
+  // 使用动态logo图片，如果没有则使用默认logo
+  const logoImage = homepageData?.style?.logo_image || logo;
+  
   return (
-    <div className="w-full h-[calc(60/375*100vw)] bg-[rgba(39,11,79,0.05)] flex items-center justify-between px-[calc(24/375*100vw)] md:min-h-[calc(120/1920*100vw)] md:px-[calc(240/1920*100vw)]">
+    <div className="w-full h-[calc(60/375*100vw)] bg-[rgba(39,11,79,0.05)] flex items-center justify-between px-[calc(24/375*100vw)] md:h-[calc(120/1920*100vw)] md:px-[calc(240/1920*100vw)]">
       {/* logo */}
       <img
-        src={logo}
+        src={logoImage}
         alt="logo"
         className="w-[calc(173.42/375*100vw)] h-[calc(24/375*100vw)] md:w-[calc(424/1920*100vw)] md:h-[calc(58/1920*100vw)]"
       />
