@@ -23,14 +23,14 @@ const noWinPrize = { id: 0, name: "Missing", image_url: null };
 
 // 默认奖品配置（当没有API数据时使用）
 const defaultPrizes = [
-  { id: 1, name: "咖啡杯", image_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c" },
-  { id: 2, name: "谢谢参与", image_url: null },
-  { id: 3, name: "耳机", image_url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e" },
-  { id: 4, name: "谢谢参与", image_url: null },
-  { id: 5, name: "手表", image_url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30" },
-  { id: 6, name: "谢谢参与", image_url: null },
-  { id: 7, name: "笔记本", image_url: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796" },
-  { id: 8, name: "书", image_url: "https://images.unsplash.com/photo-1510127034180-4613d7d58e6e" },
+  { id: 1, name: "Cafe Cup", image_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c" },
+  { id: 2, name: "No Prize", image_url: null },
+  { id: 3, name: "Headphones", image_url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e" },
+  { id: 4, name: "No Prize", image_url: null },
+  { id: 5, name: "Watch", image_url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30" },
+  { id: 6, name: "No Prize", image_url: null },
+  { id: 7, name: "Laptop", image_url: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796" },
+  { id: 8, name: "Book", image_url: "https://images.unsplash.com/photo-1510127034180-4613d7d58e6e" },
 ];
 
 // 奖品颜色配置（9个位置的颜色）
