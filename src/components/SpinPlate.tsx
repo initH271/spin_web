@@ -19,7 +19,7 @@ interface SpinPlateProps {
 }
 
 // 未中奖奖品占位
-const noWinPrize = { id: 0, name: "未中奖", image_url: null };
+const noWinPrize = { id: 0, name: "Missing", image_url: null };
 
 // 默认奖品配置（当没有API数据时使用）
 const defaultPrizes = [
