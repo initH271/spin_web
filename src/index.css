@@ -41,4 +41,8 @@
   .bg-gradient-mobile {
     background: linear-gradient(114.33deg, #ff5ea7 26.13%, #c85aff 61.46%, #5a74ff 97.84%);
   }
+
+  .scroll-bar-hidden {
+    scrollbar-width: none;
+  }
 }

@@ -325,7 +325,7 @@ const SpinPlate = () => {
   }, [resizeCanvas, preloadImages]);
 
   return (
-    <div className="flex flex-col items-center justify-start w-[calc(327/375*100vw)] h-[calc(361/375*100vw)] mt-[calc(47/375*100vw)] px-[calc(24/375*100vw)] *:font-['Montserrat_Alternates'] relative md:w-[calc(776/1920*100vw)] md:h-[calc(856/1920*100vw)] md:mt-0 md:mb-[calc(68/1920*100vw)] md:pr-[calc(240/1920*100vw)]">
+    <div className="flex flex-col items-center justify-start w-[calc(327/375*100vw)] h-[calc(361/375*100vw)] mt-[calc(47/375*100vw)] px-[calc(24/375*100vw)] *:font-['Montserrat_Alternates'] relative md:w-[calc(776/1920*100vw)] md:h-[calc(856/1920*100vw)] md:mt-0 md:mb-[calc(68/1920*100vw)] md:mr-[calc(175/1920*100vw)]">
       {/* 转盘底座 */}
       <div className="absolute bottom-0 w-[calc(327/375*100vw)] h-[calc(108/375*100vw)] md:w-[calc(776/1920*100vw)] md:h-[calc(258/1920*100vw)]">
         <img src={spinPlateBase} alt="spin plate base" className="w-full h-full" />

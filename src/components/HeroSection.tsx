@@ -1,6 +1,6 @@
 const HeroSection = () => {
   return (
-    <div className="flex flex-col shrink-0 items-start justify-start gap-[calc(16/375*100vw)] px-[calc(35/375*100vw)] *:font-['Montserrat_Alternates'] md:pt-[calc(231/1920*100vw)] md:gap-[calc(16/1920*100vw)]">
+    <div className="flex flex-col shrink-0 items-start justify-start gap-[calc(16/375*100vw)] px-[calc(35/375*100vw)] *:font-['Montserrat_Alternates'] md:pt-[calc(231/1920*100vw)] md:gap-[calc(16/1920*100vw)] md:pl-[calc(240/1920*100vw)] md:pr-0">
       <span className="h-[calc(29/375*100vw)] font-black text-[calc(24/375*100vw)] leading-[calc(29/375*100vw)] tracking-[-0.04em] text-white text-shadow-glow md:h-[calc(59/1920*100vw)] md:text-[calc(48/1920*100vw)] md:leading-[calc(59/1920*100vw)]">
         Headline copy materials
       </span>
