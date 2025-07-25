@@ -1,4 +1,5 @@
 import iconClose from "../../assets/svg/icon_close.svg";
+import { useState } from "react";
 
 interface ClaimPrizeModalProps {
   isOpen: boolean;
@@ -6,10 +7,47 @@ interface ClaimPrizeModalProps {
   onClose: () => void;
 }
 
+// 常见国家列表
+const commonCountries = [
+  "United States",
+  "Canada", 
+  "United Kingdom",
+  "Germany",
+  "France",
+  "Australia",
+  "Japan",
+  "China",
+  "India",
+  "Brazil",
+  "Mexico",
+  "South Korea",
+  "Italy",
+  "Spain",
+  "Netherlands",
+  "Sweden",
+  "Norway",
+  "Denmark",
+  "Switzerland",
+  "Singapore",
+  "Other"
+];
+
 export default function ClaimPrizeModal({ isOpen, onClose, onClaim }: ClaimPrizeModalProps) {
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
+
   if (!isOpen) return null;
 
   const isMobile = window.innerWidth < 768;
+
+  const handleCountrySelect = (country: string) => {
+    setSelectedCountry(country);
+    setIsCountryDropdownOpen(false);
+  };
+
+  const toggleCountryDropdown = () => {
+    setIsCountryDropdownOpen(!isCountryDropdownOpen);
+  };
 
   if (isMobile) {
     return (
@@ -59,15 +97,44 @@ export default function ClaimPrizeModal({ isOpen, onClose, onClaim }: ClaimPrize
               />
             </div>
             {/* country */}
-            <div className="flex flex-col items-center justify-center w-[calc(266/375*100vw)] h-[calc(63/375*100vw)] gap-[calc(4/375*100vw)]">
+            <div className="flex flex-col items-center justify-center w-[calc(266/375*100vw)] h-[calc(63/375*100vw)] gap-[calc(4/375*100vw)] relative">
               <div className="w-[calc(266/375*100vw)] h-[calc(17/375*100vw)] font-['Montserrat'] font-light text-[calc(14/375*100vw)] leading-[calc(17/375*100vw)] tracking-[-0.01em] text-black flex-none order-0 grow-0 flex items-center justify-start gap-[calc(4/375*100vw)]">
                 Country
                 <span className="text-[#EF3851] text-[calc(12/375*100vw)]">(Country is required)</span>
               </div>
-              <input
-                type="text"
-                className="box-border w-[calc(266/375*100vw)] h-[calc(42/375*100vw)] bg-[rgba(39,11,79,0.05)] border border-[#270B4F] rounded-[calc(21/375*100vw)] flex-none order-1 self-stretch grow-0 z-[1] p-[calc(16/375*100vw)]"
-              />
+              <div className="relative w-full">
+                <div
+                  className="box-border w-[calc(266/375*100vw)] h-[calc(42/375*100vw)] bg-[rgba(39,11,79,0.05)] border border-[#270B4F] rounded-[calc(21/375*100vw)] flex-none order-1 self-stretch grow-0 z-[1] p-[calc(16/375*100vw)] flex items-center justify-between cursor-pointer"
+                  onClick={toggleCountryDropdown}
+                >
+                  <span className={`font-['Montserrat'] text-[calc(14/375*100vw)] ${selectedCountry ? 'text-black' : 'text-gray-400'}`}>
+                    {selectedCountry || "Select Country"}
+                  </span>
+                  <svg 
+                    className={`w-[calc(12/375*100vw)] h-[calc(12/375*100vw)] transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                {isCountryDropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#270B4F] rounded-[calc(12/375*100vw)] max-h-[calc(200/375*100vw)] overflow-y-auto z-10 shadow-lg scroll-bar-hidden">
+                    {commonCountries.map((country, index) => (
+                      <div
+                        key={index}
+                        className={`px-[calc(16/375*100vw)] py-[calc(12/375*100vw)] cursor-pointer hover:bg-[rgba(39,11,79,0.05)] font-['Montserrat'] text-[calc(14/375*100vw)] ${
+                          selectedCountry === country ? 'bg-[rgba(39,11,79,0.1)]' : ''
+                        } ${index === 0 ? 'rounded-t-[calc(12/375*100vw)]' : ''} ${index === commonCountries.length - 1 ? 'rounded-b-[calc(12/375*100vw)]' : ''}`}
+                        onClick={() => handleCountrySelect(country)}
+                      >
+                        {country}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
             {/* street address */}
             <div className="flex flex-col items-center justify-center w-[calc(266/375*100vw)] h-[calc(63/375*100vw)] gap-[calc(4/375*100vw)]">
@@ -154,15 +221,44 @@ export default function ClaimPrizeModal({ isOpen, onClose, onClaim }: ClaimPrize
             />
           </div>
           {/* country */}
-          <div className="flex flex-col items-center justify-center w-[calc(266/1920*100vw)] h-[calc(63/1920*100vw)] gap-[calc(4/1920*100vw)]">
+          <div className="flex flex-col items-center justify-center w-[calc(266/1920*100vw)] h-[calc(63/1920*100vw)] gap-[calc(4/1920*100vw)] relative">
             <div className="w-[calc(266/1920*100vw)] h-[calc(17/1920*100vw)] font-['Montserrat'] font-light text-[calc(14/1920*100vw)] leading-[calc(17/1920*100vw)] tracking-[-0.01em] text-black flex-none order-0 grow-0 flex items-center justify-start gap-[calc(4/1920*100vw)]">
               Country
               <span className="text-[#EF3851] text-[calc(12/1920*100vw)]">(Country is required)</span>
             </div>
-            <input
-              type="text"
-              className="box-border w-[calc(266/1920*100vw)] h-[calc(42/1920*100vw)] bg-[rgba(39,11,79,0.05)] border border-[#270B4F] rounded-[calc(21/1920*100vw)] flex-none order-1 self-stretch grow-0 z-[1] p-[calc(16/1920*100vw)]"
-            />
+            <div className="relative w-full">
+              <div
+                className="box-border w-[calc(266/1920*100vw)] h-[calc(42/1920*100vw)] bg-[rgba(39,11,79,0.05)] border border-[#270B4F] rounded-[calc(21/1920*100vw)] flex-none order-1 self-stretch grow-0 z-[1] p-[calc(16/1920*100vw)] flex items-center justify-between cursor-pointer"
+                onClick={toggleCountryDropdown}
+              >
+                <span className={`font-['Montserrat'] text-[calc(14/1920*100vw)] ${selectedCountry ? 'text-black' : 'text-gray-400'}`}>
+                  {selectedCountry || "Select Country"}
+                </span>
+                <svg 
+                  className={`w-[calc(12/1920*100vw)] h-[calc(12/1920*100vw)] transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+              {isCountryDropdownOpen && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#270B4F] rounded-[calc(12/1920*100vw)] max-h-[calc(200/1920*100vw)] overflow-y-auto z-10 shadow-lg scroll-bar-hidden">
+                  {commonCountries.map((country, index) => (
+                    <div
+                      key={index}
+                      className={`px-[calc(16/1920*100vw)] py-[calc(12/1920*100vw)] cursor-pointer hover:bg-[rgba(39,11,79,0.05)] font-['Montserrat'] text-[calc(14/1920*100vw)] ${
+                        selectedCountry === country ? 'bg-[rgba(39,11,79,0.1)]' : ''
+                      } ${index === 0 ? 'rounded-t-[calc(12/1920*100vw)]' : ''} ${index === commonCountries.length - 1 ? 'rounded-b-[calc(12/1920*100vw)]' : ''}`}
+                      onClick={() => handleCountrySelect(country)}
+                    >
+                      {country}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           {/* street address */}
           <div className="flex flex-col items-center justify-center w-[calc(266/1920*100vw)] h-[calc(63/1920*100vw)] gap-[calc(4/1920*100vw)]">

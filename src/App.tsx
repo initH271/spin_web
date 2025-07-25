@@ -13,8 +13,8 @@ function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isMyPrizesModalOpen, setIsMyPrizesModalOpen] = useState(false);
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
-  const [isClaimPrizeModalOpen, setIsClaimPrizeModalOpen] = useState(false);
-  const [isClaimTokenPrizeModalOpen, setIsClaimTokenPrizeModalOpen] = useState(true);
+  const [isClaimPrizeModalOpen, setIsClaimPrizeModalOpen] = useState(true);
+  const [isClaimTokenPrizeModalOpen, setIsClaimTokenPrizeModalOpen] = useState(false);
   return (
     <div className="relative w-full min-h-[calc(375/812*100vw)] bg-gradient-mobile flex flex-col md:h-[calc(1080/1920*100vw)]">
       {/* header */}
