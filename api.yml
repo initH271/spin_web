@@ -1,0 +1,931 @@
+openapi: 3.0.3
+info:
+  title: Spin Wheel Game API
+  version: 1.0.0
+  description: 转盘游戏API文档
+paths:
+  /api/spin/:
+    post:
+      operationId: spin_create
+      description: 执行转盘游戏操作。需要提供转盘实例ID，系统会检查用户每日转盘次数限制，随机抽取奖品并记录历史。
+      summary: 转盘游戏
+      tags:
+      - 🎰 转盘游戏
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpinRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SpinRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SpinRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpinResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/register/:
+    post:
+      operationId: register_create
+      description: 使用邮箱、密码和验证码注册新用户。注册成功后自动登录并返回JWT令牌。
+      summary: 用户注册
+      tags:
+      - 🔐 用户认证
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RegisterRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RegisterRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/login/:
+    post:
+      operationId: login_create
+      description: 使用邮箱和密码进行用户登录，返回JWT Token。成功登录后更新最后登录时间。
+      summary: 用户登录
+      tags:
+      - 🔐 用户认证
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/logout/:
+    post:
+      operationId: logout_create
+      description: 用户登出，清除服务端的refresh token，使其失效。支持失效token调用，确保登出操作始终可用。
+      summary: 用户登出
+      tags:
+      - 🔐 用户认证
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/verify-email/:
+    post:
+      operationId: verify_email_create
+      description: 验证用户邮箱。使用邮箱和验证码进行验证，验证成功后更新用户的邮箱验证状态。
+      summary: 邮箱验证
+      tags:
+      - 🔐 用户认证
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/send-verification-code/:
+    post:
+      operationId: send_verification_code_create
+      description: 发送邮箱验证码。系统会检查发送频率限制（1分钟间隔，每小时最多5次），生成4位数字验证码并发送邮件。
+      summary: 发送验证码
+      tags:
+      - 🔐 用户认证
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendVerificationRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendVerificationRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendVerificationRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/forgot-password-send-code/:
+    post:
+      operationId: forgot_password_send_code_create
+      description: 为忘记密码的用户发送验证码。系统会检查邮箱是否已注册，然后发送验证码用于密码重置。
+      summary: 忘记密码 - 发送验证码
+      tags:
+      - 🔐 用户认证
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendVerificationRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendVerificationRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendVerificationRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/reset-password/:
+    post:
+      operationId: reset_password_create
+      description: 使用验证码重置密码。验证邮箱验证码后，允许用户设置新密码。
+      summary: 忘记密码 - 重置密码
+      tags:
+      - 🔐 用户认证
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/daily-spin-status/:
+    get:
+      operationId: daily_spin_status_retrieve
+      description: 获取当前用户在指定转盘实例中的每日转盘次数状态，包括已转次数、剩余次数、下次重置时间等。
+      summary: 获取每日转盘次数状态
+      parameters:
+      - in: query
+        name: wheel_instance_id
+        schema:
+          type: integer
+        description: 转盘实例ID
+        required: true
+      tags:
+      - 🎰 转盘游戏
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/user-prizes/:
+    get:
+      operationId: user_prizes_retrieve
+      description: 获取当前用户的奖品列表，支持按转盘实例和状态过滤。只返回未领取的奖品。
+      summary: 获取用户奖品列表
+      parameters:
+      - in: query
+        name: wheel_instance_id
+        schema:
+          type: integer
+        description: 转盘实例ID（可选，用于过滤特定转盘的奖品）
+      tags:
+      - 🎁 奖品管理
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/claim-prize/:
+    post:
+      operationId: claim_prize_create
+      description: 领取指定的奖品。用户可以选择领取方式：实物配送或现金提现。
+      summary: 领取奖品
+      tags:
+      - 🎁 奖品管理
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: {}
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: {}
+          multipart/form-data:
+            schema:
+              type: object
+              additionalProperties: {}
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/homepage/:
+    get:
+      operationId: homepage_retrieve
+      description: 获取主页加载所需的所有数据，包括转盘样式、奖品列表等。如果不提供url_slug参数，则返回默认转盘实例的数据。此接口无需鉴权，用于页面初始化。
+      summary: 获取主页数据
+      parameters:
+      - in: query
+        name: url_slug
+        schema:
+          type: string
+        description: 转盘实例的URL标识，可选参数。如果不提供，则返回默认转盘实例的数据
+      tags:
+      - 🏠 主页数据
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticsResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+components:
+  schemas:
+    APIResponse:
+      type: object
+      description: 统一API响应格式
+      properties:
+        code:
+          type: integer
+          description: 业务状态码，0表示成功，1表示失败
+        message:
+          type: string
+          description: 响应消息
+        data:
+          nullable: true
+          description: 响应数据
+      required:
+      - code
+      - data
+      - message
+    AuthResponseData:
+      type: object
+      description: 认证成功响应数据
+      properties:
+        user:
+          type: object
+          additionalProperties: {}
+          description: 用户信息
+        tokens:
+          allOf:
+          - $ref: '#/components/schemas/TokenResponse'
+          description: JWT令牌
+      required:
+      - tokens
+      - user
+    ErrorResponse:
+      type: object
+      description: 错误响应
+      properties:
+        code:
+          type: integer
+          description: 业务状态码，0表示成功，1表示失败
+        message:
+          type: string
+          description: 响应消息
+        data:
+          nullable: true
+      required:
+      - code
+      - data
+      - message
+    LoginRequestRequest:
+      type: object
+      description: 用户登录请求
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          description: 邮箱地址
+        password:
+          type: string
+          minLength: 1
+          description: 密码
+      required:
+      - email
+      - password
+    LoginResponse:
+      type: object
+      description: 登录成功响应
+      properties:
+        code:
+          type: integer
+          description: 业务状态码，0表示成功，1表示失败
+        message:
+          type: string
+          description: 响应消息
+        data:
+          $ref: '#/components/schemas/AuthResponseData'
+      required:
+      - code
+      - data
+      - message
+    PrizeInfo:
+      type: object
+      description: 奖品信息
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        image_url:
+          type: string
+          format: uri
+          nullable: true
+        probability:
+          type: number
+          format: double
+        cash_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+      required:
+      - cash_amount
+      - description
+      - id
+      - image_url
+      - name
+      - probability
+      - type
+    RegisterRequestRequest:
+      type: object
+      description: 用户注册请求
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          description: 邮箱地址
+        password:
+          type: string
+          minLength: 6
+          description: 密码，最少6位
+        verification_code:
+          type: string
+          minLength: 1
+          description: 邮箱验证码
+          maxLength: 6
+      required:
+      - email
+      - password
+      - verification_code
+    RegisterResponse:
+      type: object
+      description: 注册成功响应
+      properties:
+        code:
+          type: integer
+          description: 业务状态码，0表示成功，1表示失败
+        message:
+          type: string
+          description: 响应消息
+        data:
+          $ref: '#/components/schemas/AuthResponseData'
+      required:
+      - code
+      - data
+      - message
+    ResetPasswordRequestRequest:
+      type: object
+      description: 重置密码请求
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          description: 邮箱地址
+        code:
+          type: string
+          minLength: 1
+          description: 验证码
+          maxLength: 6
+        password:
+          type: string
+          minLength: 6
+          description: 新密码，最少6位
+        confirm_password:
+          type: string
+          minLength: 6
+          description: 确认新密码
+      required:
+      - code
+      - confirm_password
+      - email
+      - password
+    SendVerificationRequestRequest:
+      type: object
+      description: 发送验证码请求
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          description: 邮箱地址
+      required:
+      - email
+    SpinRequestRequest:
+      type: object
+      description: 转盘游戏请求
+      properties:
+        wheel_instance_id:
+          type: integer
+          description: 转盘实例ID
+      required:
+      - wheel_instance_id
+    SpinResponse:
+      type: object
+      description: 转盘游戏响应
+      properties:
+        code:
+          type: integer
+          description: 业务状态码，0表示成功，1表示失败
+        message:
+          type: string
+          description: 响应消息
+        data:
+          $ref: '#/components/schemas/SpinResponseData'
+      required:
+      - code
+      - data
+      - message
+    SpinResponseData:
+      type: object
+      description: 转盘游戏响应数据
+      properties:
+        is_win:
+          type: boolean
+          description: 是否中奖
+        prize:
+          allOf:
+          - $ref: '#/components/schemas/PrizeInfo'
+          nullable: true
+          description: 奖品信息
+        remaining_spins:
+          type: integer
+          description: 剩余转盘次数
+        total_spins_today:
+          type: integer
+          description: 今日已转次数
+        max_spins_per_day:
+          type: integer
+          description: 每日最大转盘次数
+        can_spin_again:
+          type: boolean
+          description: 是否可以再次转盘
+        spin_history_id:
+          type: integer
+          description: 转盘历史记录ID
+        wheel_instance:
+          allOf:
+          - $ref: '#/components/schemas/WheelInstanceInfo'
+          description: 转盘实例信息
+        user_prize_id:
+          type: integer
+          nullable: true
+          description: 用户奖品ID
+      required:
+      - can_spin_again
+      - is_win
+      - max_spins_per_day
+      - prize
+      - remaining_spins
+      - spin_history_id
+      - total_spins_today
+      - user_prize_id
+      - wheel_instance
+    StaticsPrize:
+      type: object
+      description: 静态资源中的奖品信息
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        image_url:
+          type: string
+          format: uri
+          nullable: true
+        probability:
+          type: number
+          format: double
+        cash_amount:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - cash_amount
+      - description
+      - id
+      - image_url
+      - name
+      - probability
+      - type
+    StaticsResponse:
+      type: object
+      description: 静态资源响应
+      properties:
+        code:
+          type: integer
+          description: 业务状态码，0表示成功，1表示失败
+        message:
+          type: string
+          description: 响应消息
+        data:
+          $ref: '#/components/schemas/StaticsResponseData'
+      required:
+      - code
+      - data
+      - message
+    StaticsResponseData:
+      type: object
+      description: 静态资源响应数据
+      properties:
+        wheel_instance:
+          allOf:
+          - $ref: '#/components/schemas/StaticsWheelInstance'
+          description: 转盘实例信息
+        style:
+          allOf:
+          - $ref: '#/components/schemas/StaticsStyle'
+          description: 样式信息
+        prizes:
+          type: array
+          items:
+            $ref: '#/components/schemas/StaticsPrize'
+          description: 奖品列表
+      required:
+      - prizes
+      - style
+      - wheel_instance
+    StaticsStyle:
+      type: object
+      description: 静态资源中的样式信息
+      properties:
+        name:
+          type: string
+        logo_image:
+          type: string
+          format: uri
+          nullable: true
+        title_image:
+          type: string
+          format: uri
+          nullable: true
+        background_image:
+          type: string
+          format: uri
+          nullable: true
+        wheel_image:
+          type: string
+          format: uri
+          nullable: true
+        pointer_image:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - background_image
+      - logo_image
+      - name
+      - pointer_image
+      - title_image
+      - wheel_image
+    StaticsWheelInstance:
+      type: object
+      description: 静态资源中的转盘实例信息
+      properties:
+        name:
+          type: string
+        wheel_url:
+          type: string
+          format: uri
+      required:
+      - name
+      - wheel_url
+    TokenResponse:
+      type: object
+      description: JWT Token响应
+      properties:
+        refresh:
+          type: string
+          description: 刷新令牌
+        access:
+          type: string
+          description: 访问令牌
+      required:
+      - access
+      - refresh
+    VerificationResponse:
+      type: object
+      description: 验证码发送成功响应
+      properties:
+        code:
+          type: integer
+          description: 业务状态码，0表示成功，1表示失败
+        message:
+          type: string
+          description: 响应消息
+        data:
+          $ref: '#/components/schemas/VerificationResponseData'
+      required:
+      - code
+      - data
+      - message
+    VerificationResponseData:
+      type: object
+      description: 验证码发送响应数据
+      properties:
+        email:
+          type: string
+          format: email
+          description: 邮箱地址
+        expires_in:
+          type: integer
+          description: 验证码有效期（秒）
+      required:
+      - email
+      - expires_in
+    VerifyEmailRequestRequest:
+      type: object
+      description: 邮箱验证请求
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          description: 邮箱地址
+        code:
+          type: string
+          minLength: 1
+          description: 验证码
+          maxLength: 6
+      required:
+      - code
+      - email
+    WheelInstanceInfo:
+      type: object
+      description: 转盘实例信息
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        url_slug:
+          type: string
+      required:
+      - id
+      - name
+      - url_slug
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

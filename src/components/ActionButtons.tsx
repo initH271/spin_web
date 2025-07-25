@@ -1,14 +1,19 @@
 import iconPlate from "../assets/svg/icon_plate.svg";
 import iconMulti from "../assets/svg/icon_multi.svg";
+import { useHomepageStore } from "../store";
 
 const ActionButtons = ({ onMyPrizes }: { onMyPrizes: () => void }) => {
+  const { spinStatus } = useHomepageStore();
+  
+  // 获取剩余转盘次数
+  const remainingSpins = spinStatus?.remaining_count || 0;
   return (
     <div className="flex flex-col items-start justify-start gap-[calc(16/375*100vw)] w-full h-[calc(100/375*100vw)] mt-[calc(24/375*100vw)] mb-[calc(56/375*100vw)] px-[calc(24/375*100vw)] **:font-['Montserrat_Alternates'] relative md:hidden">
       <div className="flex flex-row justify-center items-center gap-[calc(3/375*100vw)] w-[calc(327/375*100vw)] h-[calc(42/375*100vw)] bg-white rounded-[30px] flex-none order-0 grow-0">
         <img src={iconPlate} alt="icon plate" className="size-[calc(20/375*100vw)]" />
         <img src={iconMulti} alt="icon multi" className="size-[calc(8/375*100vw)]" />
         <span className="h-[calc(15/375*100vw)] font-normal text-[calc(16/375*100vw)] leading-[calc(15/375*100vw)] text-black flex-none order-0 grow-0">
-          3
+          {remainingSpins}
         </span>
       </div>
       <div

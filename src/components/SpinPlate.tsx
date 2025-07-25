@@ -1,38 +1,90 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import spinPlate from "../assets/images/spin_plate.png";
 import spinPointer from "../assets/images/spin_pointer.png";
 import spinPlateBase from "../assets/images/plate_base.png";
+import type { StaticsPrize } from "../api/homepageService";
+import type { SpinResponseData } from "../api/spinService";
+import type { ClaimPrizeResponse } from "../api/prizeService";
+import spinService from "../api/spinService";
+import prizeService from "../api/prizeService";
+import { toast } from "sonner";
+import { useHomepageStore } from "../store";
+import MessageModal from "./modal/messageModal";
+import ClaimPrizeModal from "./modal/claimPrizeModal";
+import ClaimTokenPrizeModal from "./modal/claimTokenPrize";
 
-// 奖品配置
-const prizes = [
-  { name: "咖啡杯", color: "#fecaca", imgUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c" },
-  { name: "谢谢参与", color: "#ffffff" },
-  { name: "耳机", color: "#fed7aa", imgUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e" },
-  { name: "谢谢参与", color: "#ffffff" },
-  { name: "手表", color: "#bbf7d0", imgUrl: "https://images.unsplash.com/photo-1523275335684-37898b6baf30" },
-  { name: "谢谢参与", color: "#ffffff" },
-  { name: "笔记本", color: "#bfdbfe", imgUrl: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796" },
-  { name: "书", color: "#e9d5ff", imgUrl: "https://images.unsplash.com/photo-1510127034180-4613d7d58e6e" },
+interface SpinPlateProps {
+  prizes?: StaticsPrize[];
+  wheelInstanceId?: number;
+}
+
+// 未中奖奖品占位
+const noWinPrize = { id: 0, name: "未中奖", image_url: null };
+
+// 默认奖品配置（当没有API数据时使用）
+const defaultPrizes = [
+  { id: 1, name: "咖啡杯", image_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c" },
+  { id: 2, name: "谢谢参与", image_url: null },
+  { id: 3, name: "耳机", image_url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e" },
+  { id: 4, name: "谢谢参与", image_url: null },
+  { id: 5, name: "手表", image_url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30" },
+  { id: 6, name: "谢谢参与", image_url: null },
+  { id: 7, name: "笔记本", image_url: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796" },
+  { id: 8, name: "书", image_url: "https://images.unsplash.com/photo-1510127034180-4613d7d58e6e" },
 ];
 
-const numPrizes = prizes.length; // 奖品数量
-const arc = (2 * Math.PI) / numPrizes; // 每个扇形的弧度
-const arcDegrees = 360 / numPrizes; // 每个扇形的度数
+// 奖品颜色配置（9个位置的颜色）
+const prizeColors = [
+  "#fecaca", "#ffffff", "#fed7aa", "#ffffff", 
+  "#bbf7d0", "#ffffff", "#bfdbfe", "#e9d5ff", "#fef3c7"
+];
 
-const SpinPlate = () => {
+const SpinPlate = ({ prizes: propPrizes, wheelInstanceId }: SpinPlateProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [currentRotation, setCurrentRotation] = useState(0);
   const [showResult, setShowResult] = useState(false);
-  const [prizeResult, setPrizeResult] = useState("");
+  const [spinResult, setSpinResult] = useState<SpinResponseData | null>(null);
   const [_imagesLoaded, setImagesLoaded] = useState(false);
+  const [modalType, setModalType] = useState<"Congratulations" | "Oops" | "Limited">("Congratulations");
+  const [modalMessage, setModalMessage] = useState("");
+  const [showClaimPrizeModal, setShowClaimPrizeModal] = useState(false);
+  const [showClaimTokenModal, setShowClaimTokenModal] = useState(false);
+  
+  // 获取转盘状态更新函数
+  const { setSpinStatus } = useHomepageStore();
   const loadedImages = useRef<Record<string, HTMLImageElement>>({});
   const waitingAnimationId = useRef<number | null>(null);
   const finalAnimationId = useRef<number | null>(null);
 
+  // 处理奖品数据，确保转盘有9个位置（8个奖品+1个未中奖）
+  const prizes = useMemo(() => {
+    const prizeList = propPrizes || defaultPrizes;
+    const processedPrizes = [...prizeList];
+    
+    // 如果奖品数量不足8个，重复渲染充满8个位置
+    while (processedPrizes.length < 8) {
+      processedPrizes.push(...prizeList);
+    }
+    
+    // 确保有8个奖品位置
+    const prizePositions = processedPrizes.slice(0, 8);
+    
+    // 添加未中奖占位到最后一个位置（位置8）
+    const finalPrizes = [...prizePositions, noWinPrize];
+    
+
+    
+    return finalPrizes;
+  }, [propPrizes]);
+
+  const numPrizes = prizes.length; // 固定为9
+  const arc = (2 * Math.PI) / numPrizes;
+  const arcDegrees = 360 / numPrizes;
+
   // 预加载图片
   const preloadImages = useCallback((callback: () => void) => {
-    const prizeImages = prizes.filter((p) => p.imgUrl);
+    const prizeImages = prizes.filter((p) => p.image_url);
     if (prizeImages.length === 0) {
       callback();
       return;
@@ -42,9 +94,9 @@ const SpinPlate = () => {
     prizeImages.forEach((p) => {
       const img = new Image();
       img.crossOrigin = "Anonymous";
-      img.src = p.imgUrl!;
+      img.src = p.image_url!;
       img.onload = () => {
-        loadedImages.current[p.imgUrl!] = img;
+        loadedImages.current[p.image_url!] = img;
         loadedCount++;
         if (loadedCount === prizeImages.length) {
           setImagesLoaded(true);
@@ -59,7 +111,7 @@ const SpinPlate = () => {
         }
       };
     });
-  }, []);
+  }, [prizes]);
 
   // 绘制转盘
   const draw = useCallback((selectedIndex = -1) => {
@@ -85,7 +137,7 @@ const SpinPlate = () => {
     prizes.forEach((prize, i) => {
       const angle = i * arc; // 计算每个奖品的起始角度
       ctx.beginPath();
-      ctx.fillStyle = prize.color;
+      ctx.fillStyle = prizeColors[i % prizeColors.length]; // 使用循环的颜色配置
       ctx.moveTo(0, 0); // 移动到原点
       ctx.arc(0, 0, W / 2 - 1, angle, angle + arc); // 绘制扇形，W / 2 - 1 是扇形的半径，angle 是起始角度，angle + arc 是结束角度
       ctx.lineTo(0, 0); // 连接到原点
@@ -136,8 +188,8 @@ const SpinPlate = () => {
       ctx.rotate(textAngle);
 
       // 绘制图片或文字
-      if (prize.imgUrl && loadedImages.current[prize.imgUrl]) {
-        const img = loadedImages.current[prize.imgUrl];
+      if (prize.image_url && loadedImages.current[prize.image_url]) {
+        const img = loadedImages.current[prize.image_url];
         const imgSize = W * 0.1; // 图片大小为 canvas 宽度的 10%
         const imgX = (W / 2) * 0.6; // 图片 x 坐标为 canvas 宽度的 60%
         const imgY = -imgSize / 2; // 图片 y 坐标为图片高度的一半的负值
@@ -192,7 +244,7 @@ const SpinPlate = () => {
       ctx.restore();
     }
     ctx.restore();
-  }, []);
+  }, [prizes]);
 
   // 调整 Canvas 大小
   const resizeCanvas = useCallback(() => {
@@ -205,18 +257,31 @@ const SpinPlate = () => {
     draw();
   }, [draw]);
 
-  // 模拟从服务器获取奖品
-  const fetchPrizeFromServer = useCallback(() => {
+  // 从服务器获取转盘结果
+  const fetchPrizeFromServer = useCallback(async (): Promise<{ winningIndex: number; spinData: SpinResponseData }> => {
+    if (!wheelInstanceId) {
+      throw new Error("转盘实例ID未提供");
+    }
+
     console.log("Fetching prize from server...");
-    return new Promise<number>((resolve) => {
-      const delay = Math.random() * 2000 + 1000;
-      setTimeout(() => {
-        const winningIndex = Math.floor(Math.random() * numPrizes);
-        console.log(`Server responded with winning index: ${winningIndex}`);
-        resolve(winningIndex);
-      }, delay);
-    });
-  }, []);
+    const response = await spinService.spin({ wheel_instance_id: wheelInstanceId });
+    console.log("Spin response:", response);
+
+    // 根据服务器响应决定最终位置
+    let winningIndex = 0;
+    if (response.is_win && response.prize) {
+      // 中奖：找到对应的奖品索引
+      const prizeIndex = prizes.findIndex(p => p.id === response.prize!.id);
+      if (prizeIndex !== -1) {
+        winningIndex = prizeIndex;
+      }
+    } else {
+      // 未中奖：指向未中奖占位（最后一个位置）
+      winningIndex = prizes.length - 1;
+    }
+
+    return { winningIndex, spinData: response };
+  }, [wheelInstanceId, prizes]);
 
   // 开始等待旋转
   const startWaitingSpin = useCallback(() => {
@@ -253,58 +318,209 @@ const SpinPlate = () => {
   const handleSpin = useCallback(async () => {
     if (isSpinning) return;
 
+    // 检查是否有剩余次数
+    const { spinStatus } = useHomepageStore.getState();
+    if (spinStatus && !spinStatus.can_spin) {
+      // 没有次数，直接显示Limited弹窗
+      setModalType("Limited");
+      setModalMessage(`You have reached the maximum of ${spinStatus.max_spin_count} attempts for today.`);
+      setShowResult(true);
+      return;
+    }
+
     setIsSpinning(true);
     draw();
 
     startWaitingSpin();
 
-    const winningIndex = await fetchPrizeFromServer();
-    const winningPrize = prizes[winningIndex];
+        try {
+      const { winningIndex, spinData } = await fetchPrizeFromServer();
+      setSpinResult(spinData);
 
-    stopWaitingSpin();
+      stopWaitingSpin();
 
-    // 计算最终旋转角度
+          // 计算最终旋转角度
+    // 转盘奖品从12点钟方向开始顺时针排列，每个扇形40度
+    // 指针需要旋转到对应奖品的中心位置
+    // 由于指针指向12点钟方向，需要计算指针应该旋转的角度
     const prizeCenterAngle = winningIndex * arcDegrees + arcDegrees / 2;
-    const spinsForDeceleration = 2;
+    const spinsForDeceleration = 4; // 至少旋转4圈
 
     const nextFullSpin = Math.ceil(currentRotation / 360) * 360;
     const finalRotation = nextFullSpin + spinsForDeceleration * 360 + prizeCenterAngle;
 
-    const duration = 6000;
-    let startTime: number | null = null;
-    const startRotation = currentRotation;
+      const duration = 6000;
+      let startTime: number | null = null;
+      const startRotation = currentRotation;
 
-    const animateFinalSpin = (currentTime: number) => {
-      if (startTime === null) startTime = currentTime;
-      const elapsedTime = currentTime - startTime;
-      const progress = Math.min(elapsedTime / duration, 1);
-      const easedProgress = 1 - Math.pow(1 - progress, 4);
+      const animateFinalSpin = (currentTime: number) => {
+        if (startTime === null) startTime = currentTime;
+        const elapsedTime = currentTime - startTime;
+        const progress = Math.min(elapsedTime / duration, 1);
+        const easedProgress = 1 - Math.pow(1 - progress, 4);
 
-      const animatedRotation = startRotation + (finalRotation - startRotation) * easedProgress;
+        const animatedRotation = startRotation + (finalRotation - startRotation) * easedProgress;
 
-      setCurrentRotation(animatedRotation);
-      const normalizedAngle = animatedRotation % 360;
-      const currentIndex = Math.floor(normalizedAngle / arcDegrees);
-      draw(currentIndex);
+        setCurrentRotation(animatedRotation);
+        const normalizedAngle = animatedRotation % 360;
+        const currentIndex = Math.floor(normalizedAngle / arcDegrees);
+        draw(currentIndex);
 
-      if (progress < 1) {
-        finalAnimationId.current = requestAnimationFrame(animateFinalSpin);
-      } else {
-        setIsSpinning(false);
-        draw(winningIndex);
-        setPrizeResult(winningPrize.name);
-        setShowResult(true);
-      }
-    };
-    finalAnimationId.current = requestAnimationFrame(animateFinalSpin);
-  }, [isSpinning, currentRotation, draw, startWaitingSpin, stopWaitingSpin, fetchPrizeFromServer]);
+        if (progress < 1) {
+          finalAnimationId.current = requestAnimationFrame(animateFinalSpin);
+        } else {
+          setIsSpinning(false);
+          draw(winningIndex);
+          
+          // 根据结果设置弹窗类型和消息
+          if (spinData.is_win && spinData.prize) {
+            // 中奖情况
+            setModalType("Congratulations");
+            let message = `You caught a ${spinData.prize.name}`;
+            if (spinData.prize.cash_amount) {
+              message += `*${spinData.prize.cash_amount}`;
+            }
+            setModalMessage(message);
+          } else {
+            // 未中奖情况，使用Oops弹窗
+            setModalType("Oops");
+            setModalMessage("You missed the prize.\nTry again!");
+          }
+          setShowResult(true);
+          
+          // 更新转盘状态
+          if (wheelInstanceId) {
+            spinService.getDailySpinStatus({ wheel_instance_id: wheelInstanceId })
+              .then((newSpinStatus) => {
+                setSpinStatus(newSpinStatus);
+              })
+              .catch((error) => {
+                console.error('Failed to update spin status:', error);
+              });
+          }
+        }
+      };
+      finalAnimationId.current = requestAnimationFrame(animateFinalSpin);
+    } catch (error) {
+      stopWaitingSpin();
+      setIsSpinning(false);
+      const errorMessage = error instanceof Error ? error.message : "转盘失败，请重试";
+      toast.error(errorMessage);
+      console.error("Spin error:", error);
+    }
+  }, [isSpinning, currentRotation, draw, startWaitingSpin, stopWaitingSpin, fetchPrizeFromServer, prizes]);
 
   // 关闭结果弹窗
   const handleCloseResult = useCallback(() => {
     setShowResult(false);
-    setPrizeResult("");
+    setModalMessage("");
     draw();
   }, [draw]);
+
+  // 处理Claim按钮点击
+  const handleClaim = useCallback(() => {
+    if (!spinResult?.user_prize_id) {
+      toast.error("奖品信息不完整，无法领取");
+      return;
+    }
+
+    // 根据奖品类型决定使用哪个弹窗
+    if (spinResult.prize?.type === "physical") {
+      // 实物奖品，显示收件地址收集弹窗
+      setShowClaimPrizeModal(true);
+    } else {
+      // 非实物奖品（现金/代币），显示提现账户收集弹窗
+      setShowClaimTokenModal(true);
+    }
+    
+    // 关闭结果弹窗
+    handleCloseResult();
+  }, [spinResult, handleCloseResult]);
+
+  // 处理Collect按钮点击
+  const handleCollect = useCallback(() => {
+    // TODO: 实现Collect逻辑
+    console.log("Collect clicked");
+    handleCloseResult();
+  }, [handleCloseResult]);
+
+  // 处理实物奖品领取
+  const handleClaimPhysicalPrize = useCallback(async (deliveryAddress: {
+    name: string;
+    phone: string;
+    address: string;
+    postal_code?: string;
+  }) => {
+    if (!spinResult?.user_prize_id) {
+      toast.error("奖品信息不完整，无法领取");
+      return;
+    }
+
+    try {
+      const response: ClaimPrizeResponse = await prizeService.claimPrize({
+        user_prize_id: spinResult.user_prize_id,
+        claim_type: 'physical_delivery',
+        delivery_address: deliveryAddress,
+      });
+      
+      // 调试：打印API响应
+      console.log("Claim prize response:", response);
+      
+      // 显示英文成功消息
+      toast.success("Prize claimed successfully!");
+      setShowClaimPrizeModal(false);
+      
+      // 重置表单数据
+      setSpinResult(null);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "领取失败，请重试";
+      toast.error(errorMessage);
+      console.error("Claim prize error:", error);
+    }
+  }, [spinResult]);
+
+  // 处理现金/代币奖品领取
+  const handleClaimTokenPrize = useCallback(async (accountInfo: string) => {
+    if (!spinResult?.user_prize_id) {
+      toast.error("奖品信息不完整，无法领取");
+      return;
+    }
+
+    try {
+      const response: ClaimPrizeResponse = await prizeService.claimPrize({
+        user_prize_id: spinResult.user_prize_id,
+        claim_type: 'cash_payout',
+        cash_account: {
+          account_type: 'alipay', // 默认使用支付宝，可以根据实际情况调整
+          account_info: accountInfo,
+        },
+      });
+      
+      // 调试：打印API响应
+      console.log("Claim token response:", response);
+      
+      // 显示英文成功消息
+      toast.success("Prize claimed successfully!");
+      setShowClaimTokenModal(false);
+      
+      // 重置表单数据
+      setSpinResult(null);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "领取失败，请重试";
+      toast.error(errorMessage);
+      console.error("Claim token error:", error);
+    }
+  }, [spinResult]);
+
+  // 关闭实物奖品领取弹窗
+  const handleCloseClaimPrizeModal = useCallback(() => {
+    setShowClaimPrizeModal(false);
+  }, []);
+
+  // 关闭现金/代币奖品领取弹窗
+  const handleCloseClaimTokenModal = useCallback(() => {
+    setShowClaimTokenModal(false);
+  }, []);
 
   // 初始化
   useEffect(() => {
@@ -322,7 +538,7 @@ const SpinPlate = () => {
         cancelAnimationFrame(finalAnimationId.current);
       }
     };
-  }, [resizeCanvas, preloadImages]);
+  }, [resizeCanvas, preloadImages, prizes]);
 
   return (
     <div className="flex flex-col items-center justify-start w-[calc(327/375*100vw)] h-[calc(361/375*100vw)] mt-[calc(47/375*100vw)] px-[calc(24/375*100vw)] *:font-['Montserrat_Alternates'] relative md:w-[calc(776/1920*100vw)] md:h-[calc(856/1920*100vw)] md:mt-0 md:mb-[calc(68/1920*100vw)] md:mr-[calc(175/1920*100vw)]">
@@ -350,21 +566,28 @@ const SpinPlate = () => {
       </div>
 
       {/* 结果弹窗 */}
-      {showResult && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 shadow-2xl text-center">
-            <h2 className="text-2xl font-bold mb-4">恭喜你！</h2>
-            <p className="text-gray-700 text-xl mb-6">
-              你抽中了: <span className="font-bold text-red-500">{prizeResult}</span>
-            </p>
-            <button
-              onClick={handleCloseResult}
-              className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-lg">
-              关闭
-            </button>
-          </div>
-        </div>
-      )}
+      <MessageModal
+        isOpen={showResult}
+        messageType={modalType}
+        message={modalMessage}
+        onClose={handleCloseResult}
+        onClaim={modalType === "Congratulations" ? handleClaim : undefined}
+        onCollect={modalType === "Congratulations" ? handleCollect : undefined}
+      />
+
+      {/* 实物奖品领取弹窗 */}
+      <ClaimPrizeModal
+        isOpen={showClaimPrizeModal}
+        onClose={handleCloseClaimPrizeModal}
+        onClaim={handleClaimPhysicalPrize}
+      />
+
+      {/* 现金/代币奖品领取弹窗 */}
+      <ClaimTokenPrizeModal
+        isOpen={showClaimTokenModal}
+        onClose={handleCloseClaimTokenModal}
+        onClaim={handleClaimTokenPrize}
+      />
     </div>
   );
 };

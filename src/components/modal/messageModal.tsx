@@ -1,6 +1,6 @@
 import iconClose from "../../assets/svg/icon_close.svg";
 
-type MessageType = "Congratulations" | "Opps" | "Limited";
+type MessageType = "Congratulations" | "Oops" | "Limited";
 
 interface MessageModalProps {
   isOpen: boolean;
@@ -64,7 +64,7 @@ export default function MessageModal({ isOpen, messageType, message, onClose, on
               </div>
             </div>
           )}
-          {(messageType === "Opps" || messageType === "Limited") && (
+          {(messageType === "Oops" || messageType === "Limited") && (
             <div className="flex items-center justify-center gap-[calc(6/375*100vw)] w-[calc(266/375*100vw)] h-[calc(58/375*100vw)]">
               <div
                 className="box-border flex flex-row justify-center items-center w-[calc(266/375*100vw)] h-[calc(58/375*100vw)] bg-[#270B4F] [box-shadow:5px_5px_10px_rgba(136,150,163,0.2),-4px_-4px_10px_rgba(255,255,255,0.4)] rounded-[calc(100/375*100vw)] font-['Montserrat'] font-bold text-[calc(20/375*100vw)] leading-[calc(24/375*100vw)] tracking-[-0.01em] text-white flex-none order-0 grow-0 uppercase"
@@ -127,7 +127,7 @@ export default function MessageModal({ isOpen, messageType, message, onClose, on
             </div>
           </div>
         )}
-        {(messageType === "Opps" || messageType === "Limited") && (
+        {(messageType === "Oops" || messageType === "Limited") && (
           <div className="flex items-center justify-center gap-[calc(6/1920*100vw)] w-[calc(266/1920*100vw)] h-[calc(58/1920*100vw)]">
             <div
               className="box-border flex flex-row justify-center items-center w-[calc(266/1920*100vw)] h-[calc(58/1920*100vw)] bg-[#270B4F] [box-shadow:5px_5px_10px_rgba(136,150,163,0.2),-4px_-4px_10px_rgba(255,255,255,0.4)] rounded-[calc(100/1920*100vw)] font-['Montserrat'] font-bold text-[calc(20/1920*100vw)] leading-[calc(24/1920*100vw)] tracking-[-0.01em] text-white flex-none order-0 grow-0 uppercase"
