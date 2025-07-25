@@ -10,7 +10,7 @@ import ClaimPrizeModal from "./components/modal/claimPrizeModal";
 import ClaimTokenPrizeModal from "./components/modal/claimTokenPrize";
 import { useUserStore } from "./store";
 import { useHomepage } from "./hooks/useHomepage";
-import { parseWheelSlugFromPath, isWheelPage } from "./utils/urlUtils";
+import { useWheelRoute } from "./hooks/useWheelRoute";
 import { Toaster } from "sonner";
 
 function App() {
@@ -21,10 +21,8 @@ function App() {
   const [isClaimTokenPrizeModalOpen, setIsClaimTokenPrizeModalOpen] = useState(false);
   const { isLoggedIn } = useUserStore();
 
-  // 解析当前URL获取转盘slug
-  const currentPath = window.location.pathname;
-  const wheelSlug = parseWheelSlugFromPath(currentPath);
-  const isWheelPagePath = isWheelPage(currentPath);
+  // 使用自定义hook解析路由中的转盘信息
+  const { wheelSlug, isWheelPagePath } = useWheelRoute();
 
   // 使用首页hook
   const { homepageData } = useHomepage(wheelSlug);
